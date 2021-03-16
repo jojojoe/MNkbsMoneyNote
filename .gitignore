@@ -1,0 +1,7 @@
+MNkbsMoneyNote.xcodeproj/xcuserdata/
+MNkbsMoneyNote.xcworkspace/
+Pods/
+*.swp
+Podfile.lock
+.DS_Store
+MNkbsMoneyNote.xcodeproj/project.xcworkspace/xcuserdata/
