@@ -6,17 +6,18 @@ target 'MNkbsMoneyNote' do
   use_frameworks!
 
   # Pods for MNkbsMoneyNote
-  # pod 'DeviceKit'
-  # pod 'SwifterSwift'
-  # pod 'Defaults'
-  # pod 'NoticeObserveKit'
-  # pod 'Swifter'
-  # pod 'SnapKit'
-  # pod 'Alertift'
-  # pod 'ZKProgressHUD'
-
-  # pod 'SwiftyStoreKit'
-  # pod 'TPInAppReceipt'
-
+  
+  # base
+    pod 'DeviceKit'
+    pod 'SwifterSwift'
+    pod 'Defaults'
+    pod 'NoticeObserveKit'
+    pod 'Swifter'
+    pod 'SnapKit'
+    pod 'Alertift'
+    pod 'ZKProgressHUD'
+  # store
+    pod 'SwiftyStoreKit'
+    pod 'TPInAppReceipt'
   
 end

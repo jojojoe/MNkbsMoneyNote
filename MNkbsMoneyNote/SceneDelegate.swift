@@ -10,13 +10,29 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var mainVC: MNkbsMainVC = MNkbsMainVC()
+    
+    func initMainVC() {
+        let nav = UINavigationController.init(rootViewController: mainVC)
+        nav.isNavigationBarHidden = true
+        window?.rootViewController = nav
+        window?.makeKeyAndVisible()
+        
+        #if DEBUG
+        for fy in UIFont.familyNames {
+            let fts = UIFont.fontNames(forFamilyName: fy)
+            for ft in fts {
+                debugPrint("***fontName = \(ft)")
+            }
+        }
+        #endif
+    }
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+         
         guard let _ = (scene as? UIWindowScene) else { return }
+        initMainVC()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

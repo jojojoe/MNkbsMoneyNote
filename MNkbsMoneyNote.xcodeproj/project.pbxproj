@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		D8BE979325FF956200C3ECD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979125FF956200C3ECD3 /* Main.storyboard */; };
 		D8BE979525FF956200C3ECD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979425FF956200C3ECD3 /* Assets.xcassets */; };
 		D8BE979825FF956200C3ECD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979625FF956200C3ECD3 /* LaunchScreen.storyboard */; };
+		EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */; };
+		EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */; };
+		EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */; };
 		F522C41D1C4C1F64DEAF1B34 /* Pods_MNkbsMoneyNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +31,9 @@
 		D8BE979725FF956200C3ECD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8BE979925FF956200C3ECD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MNkbsMoneyNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsMainVC.swift; sourceTree = "<group>"; };
+		EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingVC.swift; sourceTree = "<group>"; };
+		EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSubscriptionVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +54,6 @@
 				B8875A10C1D84523802996B2 /* Pods-MNkbsMoneyNote.debug.xcconfig */,
 				BB9993203C81E7EA801D0C69 /* Pods-MNkbsMoneyNote.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,6 +86,15 @@
 		D8BE978A25FF956200C3ECD3 /* MNkbsMoneyNote */ = {
 			isa = PBXGroup;
 			children = (
+				EB5D9B4926005DBC00033246 /* MainModule */,
+				EB5D9B4726005DB500033246 /* Root */,
+			);
+			path = MNkbsMoneyNote;
+			sourceTree = "<group>";
+		};
+		EB5D9B4726005DB500033246 /* Root */ = {
+			isa = PBXGroup;
+			children = (
 				D8BE978B25FF956200C3ECD3 /* AppDelegate.swift */,
 				D8BE978D25FF956200C3ECD3 /* SceneDelegate.swift */,
 				D8BE978F25FF956200C3ECD3 /* ViewController.swift */,
@@ -89,7 +103,17 @@
 				D8BE979625FF956200C3ECD3 /* LaunchScreen.storyboard */,
 				D8BE979925FF956200C3ECD3 /* Info.plist */,
 			);
-			path = MNkbsMoneyNote;
+			name = Root;
+			sourceTree = "<group>";
+		};
+		EB5D9B4926005DBC00033246 /* MainModule */ = {
+			isa = PBXGroup;
+			children = (
+				EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */,
+				EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */,
+				EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */,
+			);
+			path = MainModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -103,6 +127,7 @@
 				D8BE978425FF956200C3ECD3 /* Sources */,
 				D8BE978525FF956200C3ECD3 /* Frameworks */,
 				D8BE978625FF956200C3ECD3 /* Resources */,
+				AC0E0C4E127D6829F92A7318 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -159,6 +184,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AC0E0C4E127D6829F92A7318 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MNkbsMoneyNote/Pods-MNkbsMoneyNote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MNkbsMoneyNote/Pods-MNkbsMoneyNote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MNkbsMoneyNote/Pods-MNkbsMoneyNote-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B5E66551BC9FAABDB5075622 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,6 +231,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8BE979025FF956200C3ECD3 /* ViewController.swift in Sources */,
+				EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */,
+				EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */,
+				EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
 				D8BE978E25FF956200C3ECD3 /* SceneDelegate.swift in Sources */,
 			);
@@ -339,15 +384,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				INFOPLIST_FILE = MNkbsMoneyNote/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.next.innovation.MNkbsMoneyNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -358,15 +406,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				INFOPLIST_FILE = MNkbsMoneyNote/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.next.innovation.MNkbsMoneyNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
