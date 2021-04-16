@@ -16,8 +16,13 @@ target 'MNkbsMoneyNote' do
     pod 'SnapKit'
     pod 'Alertift'
     pod 'ZKProgressHUD'
+    pod 'SwiftyJSON'
+    
   # store
     pod 'SwiftyStoreKit'
     pod 'TPInAppReceipt'
+  
+  #  Debug
+    pod 'LookinServer', :configurations => ['Debug']
   
 end

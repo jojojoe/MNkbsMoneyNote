@@ -13,9 +13,15 @@
 		D8BE979325FF956200C3ECD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979125FF956200C3ECD3 /* Main.storyboard */; };
 		D8BE979525FF956200C3ECD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979425FF956200C3ECD3 /* Assets.xcassets */; };
 		D8BE979825FF956200C3ECD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979625FF956200C3ECD3 /* LaunchScreen.storyboard */; };
+		EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33025A261D457900A715EE /* MNkbsInputPreview.swift */; };
 		EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */; };
 		EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */; };
 		EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */; };
+		EB7324F026218F0100EAFFB2 /* MNkbsInputNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */; };
+		EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */; };
+		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
+		EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52F2625D68200F0C100 /* JsonConvert.swift */; };
+		EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */; };
 		F522C41D1C4C1F64DEAF1B34 /* Pods_MNkbsMoneyNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,9 +37,15 @@
 		D8BE979725FF956200C3ECD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8BE979925FF956200C3ECD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MNkbsMoneyNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB33025A261D457900A715EE /* MNkbsInputPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputPreview.swift; sourceTree = "<group>"; };
 		EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsMainVC.swift; sourceTree = "<group>"; };
 		EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingVC.swift; sourceTree = "<group>"; };
 		EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSubscriptionVC.swift; sourceTree = "<group>"; };
+		EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputNumberView.swift; sourceTree = "<group>"; };
+		EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingManager.swift; sourceTree = "<group>"; };
+		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
+		EB75C52F2625D68200F0C100 /* JsonConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvert.swift; sourceTree = "<group>"; };
+		EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNExtensionTool.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +98,22 @@
 		D8BE978A25FF956200C3ECD3 /* MNkbsMoneyNote */ = {
 			isa = PBXGroup;
 			children = (
+				EBC69A9D261EACEC00BD68C6 /* Extension */,
+				EB75C4C026252C5100F0C100 /* Tool */,
 				EB5D9B4926005DBC00033246 /* MainModule */,
 				EB5D9B4726005DB500033246 /* Root */,
 			);
 			path = MNkbsMoneyNote;
+			sourceTree = "<group>";
+		};
+		EB330259261D448700A715EE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EB33025A261D457900A715EE /* MNkbsInputPreview.swift */,
+				EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */,
+				EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		EB5D9B4726005DB500033246 /* Root */ = {
@@ -112,8 +136,26 @@
 				EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */,
 				EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */,
 				EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */,
+				EB330259261D448700A715EE /* View */,
 			);
 			path = MainModule;
+			sourceTree = "<group>";
+		};
+		EB75C4C026252C5100F0C100 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */,
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
+		EBC69A9D261EACEC00BD68C6 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EB75C52F2625D68200F0C100 /* JsonConvert.swift */,
+				EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,11 +272,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB7324F026218F0100EAFFB2 /* MNkbsInputNumberView.swift in Sources */,
 				D8BE979025FF956200C3ECD3 /* ViewController.swift in Sources */,
+				EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */,
 				EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */,
 				EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */,
 				EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */,
+				EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */,
+				EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */,
+				EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
+				EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */,
 				D8BE978E25FF956200C3ECD3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,7 +434,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				INFOPLIST_FILE = MNkbsMoneyNote/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -408,7 +456,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				INFOPLIST_FILE = MNkbsMoneyNote/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
