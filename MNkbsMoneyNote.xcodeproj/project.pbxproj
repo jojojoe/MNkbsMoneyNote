@@ -21,6 +21,7 @@
 		EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */; };
 		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
 		EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52F2625D68200F0C100 /* JsonConvert.swift */; };
+		EB7DBA222629AE1700C2FAF6 /* DSDBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */; };
 		EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */; };
 		F522C41D1C4C1F64DEAF1B34 /* Pods_MNkbsMoneyNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 		EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingManager.swift; sourceTree = "<group>"; };
 		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
 		EB75C52F2625D68200F0C100 /* JsonConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvert.swift; sourceTree = "<group>"; };
+		EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSDBHelper.swift; sourceTree = "<group>"; };
 		EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNExtensionTool.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +102,7 @@
 			children = (
 				EBC69A9D261EACEC00BD68C6 /* Extension */,
 				EB75C4C026252C5100F0C100 /* Tool */,
+				EB7DBA202629AE0900C2FAF6 /* DataBaseManager */,
 				EB5D9B4926005DBC00033246 /* MainModule */,
 				EB5D9B4726005DB500033246 /* Root */,
 			);
@@ -147,6 +150,14 @@
 				EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */,
 			);
 			path = Tool;
+			sourceTree = "<group>";
+		};
+		EB7DBA202629AE0900C2FAF6 /* DataBaseManager */ = {
+			isa = PBXGroup;
+			children = (
+				EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */,
+			);
+			path = DataBaseManager;
 			sourceTree = "<group>";
 		};
 		EBC69A9D261EACEC00BD68C6 /* Extension */ = {
@@ -277,6 +288,7 @@
 				EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */,
 				EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */,
 				EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */,
+				EB7DBA222629AE1700C2FAF6 /* DSDBHelper.swift in Sources */,
 				EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */,
 				EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */,
 				EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */,

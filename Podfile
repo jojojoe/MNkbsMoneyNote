@@ -17,6 +17,8 @@ target 'MNkbsMoneyNote' do
     pod 'Alertift'
     pod 'ZKProgressHUD'
     pod 'SwiftyJSON'
+    pod 'SQLite.swift'
+    
     
   # store
     pod 'SwiftyStoreKit'
