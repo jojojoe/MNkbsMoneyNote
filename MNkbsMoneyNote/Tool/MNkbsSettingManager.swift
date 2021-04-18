@@ -87,9 +87,10 @@ class MNkbsNumberManager {
 struct MNkbsTagItem: Codable {
     var bgColor: String = ""
     var tagName: String = ""
+    var tagIndex: String = ""
     
     func toDict() -> [String: String] {
-        let dict: [String: String] = ["bgColor": bgColor, "tagName": tagName]
+        let dict: [String: String] = ["bgColor": bgColor, "tagName": tagName, "tagIndex": tagIndex]
         return dict
     }
     

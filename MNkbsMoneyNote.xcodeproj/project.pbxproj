@@ -13,6 +13,7 @@
 		D8BE979325FF956200C3ECD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979125FF956200C3ECD3 /* Main.storyboard */; };
 		D8BE979525FF956200C3ECD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979425FF956200C3ECD3 /* Assets.xcassets */; };
 		D8BE979825FF956200C3ECD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8BE979625FF956200C3ECD3 /* LaunchScreen.storyboard */; };
+		D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BE97F7262A7DA300C3ECD3 /* MNDBManager.swift */; };
 		EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33025A261D457900A715EE /* MNkbsInputPreview.swift */; };
 		EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */; };
 		EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */; };
@@ -37,6 +38,7 @@
 		D8BE979425FF956200C3ECD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8BE979725FF956200C3ECD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8BE979925FF956200C3ECD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8BE97F7262A7DA300C3ECD3 /* MNDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNDBManager.swift; sourceTree = "<group>"; };
 		DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MNkbsMoneyNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB33025A261D457900A715EE /* MNkbsInputPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputPreview.swift; sourceTree = "<group>"; };
 		EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsMainVC.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */,
+				D8BE97F7262A7DA300C3ECD3 /* MNDBManager.swift */,
 			);
 			path = DataBaseManager;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */,
 				EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */,
 				EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */,
+				D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
 				EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */,
 				D8BE978E25FF956200C3ECD3 /* SceneDelegate.swift in Sources */,

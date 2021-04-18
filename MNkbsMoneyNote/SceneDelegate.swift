@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         for fy in UIFont.familyNames {
             let fts = UIFont.fontNames(forFamilyName: fy)
             for ft in fts {
-                debugPrint("***fontName = \(ft)")
+//                debugPrint("***fontName = \(ft)")
             }
         }
         #endif

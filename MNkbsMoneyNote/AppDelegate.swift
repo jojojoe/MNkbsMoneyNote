@@ -7,7 +7,7 @@
 
 import UIKit
 import SwiftyStoreKit
-
+import SwiftyJSON
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,10 +16,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mainVC: MNkbsMainVC = MNkbsMainVC()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // prepare db
+        MNDBManager.default.prepareDB()
+        
+        // test db
+        // inset
+        let timestamp = CLongLong(round(Date().unixTimestamp*1000)).string
+        let tags1 = MNkbsTagItem(bgColor: "#FB7751", tagName: "吃饭", tagIndex: "0")
+        let tags2 = MNkbsTagItem(bgColor: "#F07059", tagName: "购物", tagIndex: "1")
+        let tags3 = MNkbsTagItem(bgColor: "#206259", tagName: "睡觉", tagIndex: "2")
+        let tags1d = MNkbsTagItem(bgColor: "#FB7751", tagName: "吃饭", tagIndex: "0").toDict()
+        let tags2d = MNkbsTagItem(bgColor: "#F07059", tagName: "购物", tagIndex: "1").toDict()
+        let tags3d = MNkbsTagItem(bgColor: "#206259", tagName: "睡觉", tagIndex: "2").toDict()
+        let tagList = [tags1, tags2, tags3]
+        let tagListd = [tags1d, tags2d, tags3d]
+        
+        let model = MoneyNoteModel(sysDate: timestamp, recorDate: timestamp, price: "13.3", remark: "eat meet", tagJson: tagListd.toString, tagModel: tagList)
+        // insert
+//        MNDBManager.default.addMoneyNoteItem(model: model) {
+//            debugPrint("add complete")
+//        }
+        
+        // load
+//        MNDBManager.default.selectAllMoneyNoteItem { (list) in
+//            debugPrint(list)
+//        }
+        
+        // delete
+        let deleteModel = MoneyNoteModel(sysDate: "1618757283573", recorDate: "1618757283573", price: "13.3", remark: "", tagJson: "", tagModel: [])
+        MNDBManager.default.deleteMoneyNoteItem(model: deleteModel) {
+            debugPrint("delete")
+        }
+        
+        // select tags note
+//        MNDBManager.default.selectNoteRecordTags(tagNames: ["睡觉"]) { (list) in
+//            debugPrint("\(list)")
+//        }
+        
+        // 添加内置标签
+//        MNDBManager.default.addMoneyTag(tagName: "衣服", tagColor: "001100", tagIndex: "1") {
+//            debugPrint("添加内置标签")
+//        }
+//        MNDBManager.default.addMoneyTag(tagName: "吃饭", tagColor: "001100", tagIndex: "2") {
+//            debugPrint("添加内置标签")
+//        }
+//        MNDBManager.default.addMoneyTag(tagName: "旅游", tagColor: "001100", tagIndex: "3") {
+//            debugPrint("添加内置标签")
+//        }
+        // delete all tag
+//        MNDBManager.default.deleteAllMoneyTag {
+//            
+//        }
+        
+        // select taglist
+//        MNDBManager.default.selectTagList { (taglist) in
+//            debugPrint("taglist = \(tagList)")
+//        }
         
         initMainVC()
         setupIAP()
         registerNotifications(application)
+        
+        
+        
+        
         
         return true
     }
@@ -50,7 +110,7 @@ extension AppDelegate {
         for fy in UIFont.familyNames {
             let fts = UIFont.fontNames(forFamilyName: fy)
             for ft in fts {
-                debugPrint("***fontName = \(ft)")
+//                debugPrint("***fontName = \(ft)")
             }
         }
         #endif
