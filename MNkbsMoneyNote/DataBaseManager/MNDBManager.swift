@@ -146,12 +146,9 @@ extension MNDBManager {
                     }
                 }
             }
-            
         } catch {
             debugPrint("error = \(error)")
         }
-        
-        
     }
     // MoneyNoteModel
     func deleteMoneyNoteItem(model: MoneyNoteModel, completionBlock: (()->Void)?) {
@@ -163,16 +160,11 @@ extension MNDBManager {
         do {
             try db?.run(deleteItem.delete())
             deleteMoneyTagRecordList(systemDate: model.systemDate) {
-
+                completionBlock?()
             }
         } catch {
             debugPrint("dberror: delete table failed :\(db_systemDate)")
         }
-        
-        
-       
-        
-        completionBlock?()
     }
    
     // MoneyNoteModel
@@ -201,8 +193,36 @@ extension MNDBManager {
         } catch {
             debugPrint("dberror: load favorites failed")
         }
+    }
+    
+    func selectMoneyNoteItem(beginTime: Date, endTime: Date, completionBlock: (([MoneyNoteModel])->Void)?) {
+        let beginTimeStr = CLongLong(round(beginTime.unixTimestamp*1000)).string
+        let endTimeStr = CLongLong(round(endTime.unixTimestamp*1000)).string
         
-        
+        var moneyNoteList: [MoneyNoteModel] = []
+        do {
+            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY systemDate DESC;") {
+                for row in results {
+                    
+                    let sysDate_m = row[0] as? String ?? ""
+                    let recorDate_m = row[1] as? String ?? ""
+                    let price_m = row[2] as? String ?? ""
+                    let remark_m = row[3] as? String ?? ""
+                    let tagJson_m = row[4] as? String ?? ""
+                    let data = try JSON.init(parseJSON: tagJson_m).rawData()
+                    let tagListModel = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
+                    
+                    
+                    let item = MoneyNoteModel(sysDate: sysDate_m, recorDate: recorDate_m, price: price_m, remark: remark_m, tagJson: tagJson_m, tagModel: tagListModel)
+                    
+                    moneyNoteList.append(item)
+                }
+            }
+            completionBlock?(moneyNoteList)
+            
+        } catch {
+            debugPrint("dberror: load favorites failed")
+        }
     }
     
     // MoneyNoteModel

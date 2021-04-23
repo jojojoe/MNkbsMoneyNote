@@ -9,6 +9,7 @@ import UIKit
 import SwifterSwift
 import SnapKit
 import SwiftyJSON
+import ZKProgressHUD
 
 class MNkbsMainVC: UIViewController {
     let topBar = UIView()
@@ -138,8 +139,8 @@ extension MNkbsMainVC {
         }
         
         let remark: String = self.inputPreview.remarkTextView.text
-        let recordDate: Date = self.inputPreview.datePicker.date
-        let systemDate: Date = Date()
+        let recordDateStr: String = CLongLong(round(self.inputPreview.datePicker.date.unixTimestamp*1000)).string
+        let systemDateStr: String = CLongLong(round(Date().unixTimestamp*1000)).string
         var tagJsonString: String = ""
         var tagList: [[String:String]] = []
         
@@ -149,19 +150,29 @@ extension MNkbsMainVC {
             tagList.append(dict)
         }
         tagJsonString = tagList.toString // array转string
-        tagJsonString = JSON.init(parseJSON: tagJsonString).description // array通过 JSON 转string
-        let arry = tagJsonString.toArray
-        debugPrint(arry)
-        do {
-//            let data = try JSON.init(arry).rawData()
-            let data = try JSON.init(parseJSON: tagJsonString).rawData()
-            let model = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
-            debugPrint(model)
-        } catch {
-            
+        /*
+         tagJsonString = JSON.init(parseJSON: tagJsonString).description // array通过 JSON 转string
+         let arry = tagJsonString.toArray
+         debugPrint(arry)
+         do {
+ //            let data = try JSON.init(arry).rawData()
+             let data = try JSON.init(parseJSON: tagJsonString).rawData()
+             let model = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
+             debugPrint(model)
+         } catch {
+
+         }
+         */
+        let model = MoneyNoteModel(sysDate: systemDateStr, recorDate: recordDateStr, price: priceStr, remark: remark, tagJson: tagJsonString, tagModel: self.inputPreview.tagsList)
+        MNDBManager.default.addMoneyNoteItem(model: model) {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                debugPrint("add complete")
+                ZKProgressHUD.showSuccess()
+                self.inputPreview.clearDefaultStatus()
+            }
         }
-        
-        
         
 //
         
@@ -181,7 +192,9 @@ extension MNkbsMainVC {
         
     }
     @objc func insightBtnClick(sender: UIButton) {
-        
+        let noteListVC = MNkbsNoteListVC()
+        self.navigationController?.pushViewController(noteListVC)
+            
     }
     
 }

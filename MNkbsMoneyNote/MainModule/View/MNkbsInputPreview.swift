@@ -33,10 +33,52 @@ class MNkbsInputPreview: UIView {
 }
 
 extension MNkbsInputPreview {
+    func clearDefaultStatus() {
+        datePicker.date = Date()
+        updateTagCollection(tags: [])
+        updateNumber(numberItems: [.number_0])
+        remarkTextView.text = ""
+        
+    }
+    
+    func fetchContentWith(noteItem: MoneyNoteModel, isEnableEditing: Bool = true) {
+        let numbers = processStringToNumType(valueStr: noteItem.priceStr)
+        self.updateNumber(numberItems: numbers)
+        //
+        tagsList = noteItem.tagModelList
+        collection.reloadData()
+        //
+        remarkTextView.text = noteItem.remarkStr
+        //
+        let timestamp = noteItem.recordDate    
+        //CLongLong(round(Date().unixTimestamp*1000)).string
+        let dou = Double(timestamp) ?? 0
+        let timeInterStr = String(dou / 1000)
+        //
+        if let interval = TimeInterval.init(timeInterStr) {
+            let recordDate = Date(timeIntervalSince1970: interval)
+            datePicker.date = recordDate
+        }
+        if isEnableEditing {
+            remarkTextView.isUserInteractionEnabled = true
+            datePicker.isUserInteractionEnabled = true
+        } else {
+            remarkTextView.isUserInteractionEnabled = false
+            datePicker.isUserInteractionEnabled = false
+        }
+                
+        
+    }
+}
+
+extension MNkbsInputPreview {
     func updateTagCollection(tags: [MNkbsTagItem]) {
         tagsList = tags
         collection.reloadData()
-        collection.scrollToItem(at: IndexPath(item: tags.count - 1, section: 0), at: .right, animated: true)
+        if tags.count >= 1 {
+            collection.scrollToItem(at: IndexPath(item: tags.count - 1, section: 0), at: .right, animated: true)
+        }
+        
     }
     
     func inputNumber(item: MNkbsNumberItem) {
@@ -162,9 +204,6 @@ extension MNkbsInputPreview {
             updateNumber(numberItems: numberList)
             return
         }
-        
-        
-        
     }
     
     func equalFuncAction() {
@@ -210,7 +249,6 @@ extension MNkbsInputPreview {
         }
         
     }
-    
     func processStringToNumType(valueStr: String) -> [NumberType] {
         
         var singleList = valueStr.charactersArray

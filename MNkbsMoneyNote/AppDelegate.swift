@@ -43,10 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         // delete
-        let deleteModel = MoneyNoteModel(sysDate: "1618757283573", recorDate: "1618757283573", price: "13.3", remark: "", tagJson: "", tagModel: [])
-        MNDBManager.default.deleteMoneyNoteItem(model: deleteModel) {
-            debugPrint("delete")
-        }
+//        let deleteModel = MoneyNoteModel(sysDate: "1618757283573", recorDate: "1618757283573", price: "13.3", remark: "", tagJson: "", tagModel: [])
+//        MNDBManager.default.deleteMoneyNoteItem(model: deleteModel) {
+//            debugPrint("delete")
+//        }
         
         // select tags note
 //        MNDBManager.default.selectNoteRecordTags(tagNames: ["睡觉"]) { (list) in
