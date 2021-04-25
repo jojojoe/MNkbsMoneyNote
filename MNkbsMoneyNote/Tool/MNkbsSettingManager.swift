@@ -79,6 +79,58 @@ class MNkbsNumberManager {
     let number_equal = MNkbsNumberItem(numberType: .number_equal, displayName: "=")
     
      
+    func processStringToNumType(valueStr: String) -> [NumberType] {
+        
+        var singleList = valueStr.charactersArray
+        if singleList.contains("."), singleList.last == "0" {
+            singleList.removeLast()
+        }
+        var typeList: [NumberType] = []
+        for item in singleList {
+            if let item = NumberType.init(rawValue: item.string) {
+                typeList.append(item)
+            }
+        }
+        return typeList
+    }
+    
+    func processItemsNumber(numberItems: [NumberType]) -> String {
+        var numStr = ""
+        for item in numberItems {
+            switch item {
+            case .number_0:
+                numStr += "0"
+            case .number_1:
+                numStr += "1"
+            case .number_2:
+                numStr += "2"
+            case .number_3:
+                numStr += "3"
+            case .number_4:
+                numStr += "4"
+            case .number_5:
+                numStr += "5"
+            case .number_6:
+                numStr += "6"
+            case .number_7:
+                numStr += "7"
+            case .number_8:
+                numStr += "8"
+            case .number_9:
+                numStr += "9"
+            case .number_point:
+                numStr += "."
+            case .number_add:
+                numStr += "+"
+            case .number_sub:
+                numStr += "-"
+            default:
+                numStr += ""
+            }
+        }
+        return numStr
+        
+    }
     
 }
 

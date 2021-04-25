@@ -32,6 +32,14 @@ class MNkbsInputTagView: UIView {
 }
 
 extension MNkbsInputTagView {
+    func clearCurrentSelectTagList() {
+        currentSelectTagList = []
+        collection.reloadData()
+        
+    }
+}
+
+extension MNkbsInputTagView {
     func setupView() {
         
         let layout = UICollectionViewFlowLayout()
@@ -55,7 +63,7 @@ extension MNkbsInputTagView {
     }
     
     func normalCellWidth() -> CGFloat {
-        let numberWidth: CGFloat = (UIScreen.main.bounds.width - (padding() * 5)) / 4
+        let numberWidth: CGFloat = (UIScreen.main.bounds.width - (padding() * 6)) / 5
         return numberWidth
     }
     
@@ -109,7 +117,7 @@ extension MNkbsInputTagView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return padding()
     }
     
 }

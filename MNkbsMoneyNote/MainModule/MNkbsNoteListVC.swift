@@ -22,6 +22,10 @@ class MNkbsNoteListVC: UIViewController {
     var collection: UICollectionView!
     
     var noteList: [MoneyNoteModel] = []
+    //
+    let timeFilterView = MNkbsTimeFilterView()
+    let tagFilterView = MNkbsTagFilterView()
+    
     
     
     override func viewDidLoad() {
@@ -30,7 +34,8 @@ class MNkbsNoteListVC: UIViewController {
         view.clipsToBounds = true
         setupView()
         setupCollection()
-        
+        setupTimeFilterView()
+        setupTagFilterView()
         loadNoteListData()
     }
     
@@ -186,7 +191,61 @@ extension MNkbsNoteListVC {
         collection.register(cellWithClass: MNkbsNoteListCell.self)
     }
     
+    func setupTimeFilterView() {
+        view.addSubview(timeFilterView)
+        timeFilterView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.top.equalTo(topEditBar.snp.bottom)
+        }
+        timeFilterView.alpha = 0
+        timeFilterView.selectTimeFilterBlock = {
+            [weak self] timeFilterType in
+            guard let `self` = self else {return}
+            debugPrint(timeFilterType)
+        }
+        timeFilterView.backBtnBlock = {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                if self.timeFilterView.isShowStatus {
+                    self.timeFilterIconV.backgroundColor = UIColor.orange
+                } else {
+                    self.timeFilterIconV.backgroundColor = UIColor.black
+                }
+                
+            }
+        }
+    }
     
+    func setupTagFilterView() {
+        
+        view.addSubview(tagFilterView)
+        tagFilterView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.top.equalTo(topEditBar.snp.bottom)
+        }
+        tagFilterView.alpha = 0
+        tagFilterView.selectTagFilterBlock = {
+            [weak self] tagList in
+            guard let `self` = self else {return}
+            debugPrint(tagList)
+        }
+        tagFilterView.backBtnBlock = {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                if self.tagFilterView.isShowStatus {
+                    self.tagFilterIconV.backgroundColor = UIColor.orange
+                } else {
+                    self.tagFilterIconV.backgroundColor = UIColor.black
+                }
+                
+            }
+        }
+        
+    }
     
 }
 
@@ -200,13 +259,13 @@ extension MNkbsNoteListVC {
     }
     
     @objc func insightBtnClick(sender: UIButton) {
-        
+        debugPrint("show 统计view")
     }
     @objc func timeFilterTapGesClick(gesture: UIGestureRecognizer) {
-        
+        timeFilterView.showContentStatus(isShow: !timeFilterView.isShowStatus)
     }
     @objc func tagFilterTapGesClick(gesture: UIGestureRecognizer) {
-        
+        tagFilterView.showContentStatus(isShow: !tagFilterView.isShowStatus)
     }
     
 }
@@ -219,6 +278,7 @@ extension MNkbsNoteListVC {
 //            DispatchQueue.main.async {
 //                self.noteList = noteList
 //                self.collection.reloadData()
+//                updateTotalPrice()
 //            }
 //        }
         
@@ -231,8 +291,31 @@ extension MNkbsNoteListVC {
         let item6 = defauModelItem()
         self.noteList = [item1, item2, item3, item4, item5, item6]
         self.collection.reloadData()
+        updateTotalPrice()
+    }
+    
+    func updateTotalPrice() {
+        var value: Double = 0
+        for item in self.noteList {
+            value += item.priceStr.double() ?? 0
+        }
+        
+        // 计算完成后 重新赋值 numberList
+        var valueStr = String(format: "%.2f", value)
+        let values = valueStr.components(separatedBy: ".")
+        let totalLastValue = values.last?.float() ?? 0
+        if totalLastValue > 0 {
+            
+        } else {
+            valueStr = Int(value).string
+        }
+        //
+        
+        self.moneyLabel.text = MNkbsSettingManager.default.currentCurrencySymbol().rawValue + valueStr
+        
         
     }
+    
 }
 
 extension MNkbsNoteListVC {
@@ -340,4 +423,4 @@ class MNkbsNoteListCell: UICollectionViewCell {
         
     }
 }
-
+ 

@@ -42,7 +42,8 @@ extension MNkbsInputPreview {
     }
     
     func fetchContentWith(noteItem: MoneyNoteModel, isEnableEditing: Bool = true) {
-        let numbers = processStringToNumType(valueStr: noteItem.priceStr)
+        
+        let numbers = MNkbsNumberManager.default.processStringToNumType(valueStr: noteItem.priceStr)
         self.updateNumber(numberItems: numbers)
         //
         tagsList = noteItem.tagModelList
@@ -236,7 +237,7 @@ extension MNkbsInputPreview {
             valueStr = Int(value).string
         }
         //
-        let typeList = processStringToNumType(valueStr: valueStr)
+        let typeList = MNkbsNumberManager.default.processStringToNumType(valueStr: valueStr)
         updateNumber(numberItems: typeList)
         
     }
@@ -249,56 +250,13 @@ extension MNkbsInputPreview {
         }
         
     }
-    func processStringToNumType(valueStr: String) -> [NumberType] {
-        
-        var singleList = valueStr.charactersArray
-        if singleList.contains("."), singleList.last == "0" {
-            singleList.removeLast()
-        }
-        var typeList: [NumberType] = []
-        for item in singleList {
-            if let item = NumberType.init(rawValue: item.string) {
-                typeList.append(item)
-            }
-        }
-        return typeList
-    }
+    
     
     func updateNumber(numberItems: [NumberType]) {
         let currencySymbol = "\(MNkbsSettingManager.default.currentCurrencySymbol().rawValue)"
-        var numStr = ""
-        for item in numberItems {
-            switch item {
-            case .number_0:
-                numStr += "0"
-            case .number_1:
-                numStr += "1"
-            case .number_2:
-                numStr += "2"
-            case .number_3:
-                numStr += "3"
-            case .number_4:
-                numStr += "4"
-            case .number_5:
-                numStr += "5"
-            case .number_6:
-                numStr += "6"
-            case .number_7:
-                numStr += "7"
-            case .number_8:
-                numStr += "8"
-            case .number_9:
-                numStr += "9"
-            case .number_point:
-                numStr += "."
-            case .number_add:
-                numStr += "+"
-            case .number_sub:
-                numStr += "-"
-            default:
-                numStr += ""
-            }
-        }
+        
+        let numStr = MNkbsNumberManager.default.processItemsNumber(numberItems: numberItems)
+         
         self.numberList = numberItems
         currentNumberStr = numStr
         numberLabel.text = currencySymbol + numStr
