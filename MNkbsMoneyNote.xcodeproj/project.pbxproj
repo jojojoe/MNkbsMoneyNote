@@ -25,6 +25,7 @@
 		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
 		EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52F2625D68200F0C100 /* JsonConvert.swift */; };
 		EB7DBA222629AE1700C2FAF6 /* DSDBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */; };
+		EB97F2CA263599C60052952D /* MNkbsReeditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */; };
 		EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */; };
 		EBD115A2262D579000C07D5E /* MNkbsNoteListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */; };
 		F522C41D1C4C1F64DEAF1B34 /* Pods_MNkbsMoneyNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */; };
@@ -54,6 +55,7 @@
 		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
 		EB75C52F2625D68200F0C100 /* JsonConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvert.swift; sourceTree = "<group>"; };
 		EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSDBHelper.swift; sourceTree = "<group>"; };
+		EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsReeditVC.swift; sourceTree = "<group>"; };
 		EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNExtensionTool.swift; sourceTree = "<group>"; };
 		EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsNoteListVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,6 +152,7 @@
 				EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */,
 				EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */,
 				EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */,
+				EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */,
 				EB330259261D448700A715EE /* View */,
 			);
 			path = MainModule;
@@ -310,6 +313,7 @@
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
 				EBD115A2262D579000C07D5E /* MNkbsNoteListVC.swift in Sources */,
 				EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */,
+				EB97F2CA263599C60052952D /* MNkbsReeditVC.swift in Sources */,
 				D8BE978E25FF956200C3ECD3 /* SceneDelegate.swift in Sources */,
 				D8BE98702633DDA700C3ECD3 /* MNkbsTimeFilterView.swift in Sources */,
 			);

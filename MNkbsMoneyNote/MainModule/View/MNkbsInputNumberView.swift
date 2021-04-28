@@ -29,6 +29,8 @@ extension MNkbsInputNumberBar {
     func refreshNumberBarEqual(isShow: Bool) {
         showEqualCellStatus(isShow: isShow)
     }
+    
+    
 }
 
 extension MNkbsInputNumberBar {
@@ -36,6 +38,19 @@ extension MNkbsInputNumberBar {
         numCell_equal?.isHidden = !isShow
         
     }
+    
+    func refreshDoneStatus(isEnable: Bool) {
+        if isEnable {
+            numCell_done?.numLabel.textColor = UIColor.black
+            numCell_done?.isUserInteractionEnabled = true
+        } else {
+            numCell_done?.numLabel.textColor = UIColor.lightGray
+            numCell_done?.isUserInteractionEnabled = false
+        }
+        
+    }
+    
+    
 }
 
 

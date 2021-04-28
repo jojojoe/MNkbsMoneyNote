@@ -16,6 +16,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mainVC: MNkbsMainVC = MNkbsMainVC()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        //
+        var beginTimeDate = Date.today().previous(.monday, considerToday: true)
+        var endTimeDate = Date.today()
+//
+        let formatter = DateFormatter.init()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateStr_begin = formatter.string(from: beginTimeDate)
+        let dateStr_end = formatter.string(from: endTimeDate)
+        
+        let monthFirst = Date().startOfCurrentMonth()
+        let monthLast = Date().endOfCurrentMonth()
+        let yearFirst = Date().startOfCurrentYear()
+        let yearLast = Date().endOfCurrentYear()
+
+
+        debugPrint("dateStr_begin = \(dateStr_begin)")
+        debugPrint("endTimeDate = \(endTimeDate)")
+        debugPrint("monthFirst = \(monthFirst)")
+        debugPrint("monthLast = \(monthLast)")
+        debugPrint("yearFirst = \(yearFirst)")
+        debugPrint("yearLast = \(yearLast)")
+        
         // prepare db
         MNDBManager.default.prepareDB()
         

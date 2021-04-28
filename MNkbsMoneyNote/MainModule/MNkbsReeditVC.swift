@@ -1,28 +1,44 @@
 //
-//  MNkbsMainVC.swift
+//  MNkbsReeditVC.swift
 //  MNkbsMoneyNote
 //
-//  Created by JOJO on 2021/3/16.
+//  Created by JOJO on 2021/4/25.
 //
 
 import UIKit
-import SwifterSwift
-import SnapKit
-import SwiftyJSON
 import ZKProgressHUD
 
-class MNkbsMainVC: UIViewController {
-    let topBar = UIView()
-    let settingBtn = UIButton(type: .custom)
-    let insightBtn = UIButton(type: .custom)
+class MNkbsReeditVC: UIViewController {
+
+    let topTitleLabel = UILabel()
+    let backBtn = UIButton(type: .custom)
     
     let inputPreview = MNkbsInputPreview()
     let tagView = MNkbsInputTagView()
     let numberBar = MNkbsInputNumberBar()
+    
+    let currentNoteItem: MoneyNoteModel
+    
+    init(noteItem: MoneyNoteModel) {
+        currentNoteItem = noteItem
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#171717")
-        setupCodeUI()
+        setupView()
+        setupInputPreview()
+        setupInputNumberBar()
+        setupInputTagView()
+        
+        // last
+        setupCurrentNoteItemContent()
     }
     
 
@@ -30,42 +46,47 @@ class MNkbsMainVC: UIViewController {
 
 }
 
-extension MNkbsMainVC {
-    func setupCodeUI() {
+extension MNkbsReeditVC {
+    func setupCurrentNoteItemContent() {
+        inputPreview.fetchContentWith(noteItem: currentNoteItem)
+        self.numberBar.refreshDoneStatus(isEnable: true)
+    }
+    
+    
+    
+}
 
-        view.addSubview(topBar)
-        topBar.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
+extension MNkbsReeditVC {
+    func setupView() {
+        
+        topTitleLabel.font = UIFont(name: "ArialRoundedMTBold", size: 16)
+        topTitleLabel.text = "Edit"
+        topTitleLabel.textColor = UIColor.black
+        view.addSubview(topTitleLabel)
+        topTitleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.height.equalTo(44)
+            $0.width.greaterThanOrEqualTo(10)
         }
         //
 
-        topBar.addSubview(settingBtn)
-        settingBtn.snp.makeConstraints {
-            $0.left.equalTo(12)
-            $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(44)
+        backBtn.setTitle("back", for: .normal)
+        backBtn.setTitleColor(.black, for: .normal)
+        view.addSubview(backBtn)
+        backBtn.snp.makeConstraints {
+            $0.centerY.equalTo(topTitleLabel)
+            $0.right.equalTo(-10)
+            $0.width.equalTo(54)
+            $0.height.equalTo(44)
         }
-        settingBtn.backgroundColor = .lightGray
-        settingBtn.setTitle("设置", for: .normal)
-        settingBtn.addTarget(self, action: #selector(settingBtnClick(sender:)), for: .touchUpInside)
+        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         //
         
-        topBar.addSubview(insightBtn)
-        insightBtn.snp.makeConstraints {
-            $0.right.equalTo(-12)
-            $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(44)
-        }
-        insightBtn.backgroundColor = .lightGray
-        insightBtn.setTitle("分析", for: .normal)
-        insightBtn.addTarget(self, action: #selector(insightBtnClick(sender:)), for: .touchUpInside)
-        //
-        setupInputPreview()
-        setupInputNumberBar()
-        setupInputTagView()
+        
+        
     }
+    
     
     func setupInputPreview() {
         inputPreview.shouldShowEqualStatusBlock = {
@@ -75,7 +96,7 @@ extension MNkbsMainVC {
         }
         view.addSubview(inputPreview)
         inputPreview.snp.makeConstraints {
-            $0.top.equalTo(topBar.snp.bottom).offset(6)
+            $0.top.equalTo(topTitleLabel.snp.bottom).offset(6)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(130)
         }
@@ -97,7 +118,7 @@ extension MNkbsMainVC {
     }
     
     func setupInputNumberBar() {
-        numberBar.refreshDoneStatus(isEnable: false)
+        
         view.addSubview(numberBar)
         numberBar.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -111,17 +132,19 @@ extension MNkbsMainVC {
                 [weak self] in
                 guard let `self` = self else {return}
                 self.inputNumber(item: numbItem)
-                
-                
             }
         }
-        
     }
-    
-    
 }
 
-extension MNkbsMainVC {
+
+
+extension MNkbsReeditVC {
+    @objc func backBtnClick(sender: UIButton) {
+        
+    }
+}
+extension MNkbsReeditVC {
     func inputNumber(item: MNkbsNumberItem) {
         if item.numberType == .number_done {
             saveCurrentRecordToDB()
@@ -141,10 +164,10 @@ extension MNkbsMainVC {
         let priceStr: String = self.inputPreview.currentNumberStr
         let remark: String = self.inputPreview.remarkTextView.text
         let recordDateStr: String = CLongLong(round(self.inputPreview.datePicker.date.unixTimestamp*1000)).string
-        let systemDateStr: String = CLongLong(round(Date().unixTimestamp*1000)).string
+        //使用当前编辑的 note item 的唯一键值 systemDate
+        let systemDateStr: String = self.currentNoteItem.systemDate
         var tagJsonString: String = ""
         var tagList: [[String:String]] = []
-        
         
         for tagItem in self.inputPreview.tagsList {
             let dict = tagItem.toDict()
@@ -176,18 +199,3 @@ extension MNkbsMainVC {
         }
     }
 }
-
-extension MNkbsMainVC {
-    @objc func settingBtnClick(sender: UIButton) {
-        
-    }
-    @objc func insightBtnClick(sender: UIButton) {
-        let noteListVC = MNkbsNoteListVC()
-        self.navigationController?.pushViewController(noteListVC)
-            
-    }
-    
-}
-
-
-

@@ -31,6 +31,46 @@ struct MoneyNoteModel {
 }
 
 
+extension MNDBManager {
+//    func filterNote(timeType: TimeFitlerType, completionBlock: (([MoneyNoteModel])->Void)?) {
+//
+//        var beginTimeDate = beginTimeDateFor(timeType: timeType)
+//        var endTimeDate = Date.today()
+//
+////        selectMoneyNoteItem(beginTime: beginTimeDate, endTime: endTimeDate, completionBlock: completionBlock)
+//    }
+    
+    func filterNote(tagNameList: [String], timeType: TimeFitlerType, completionBlock: (([MoneyNoteModel])->Void)?) {
+      
+        let beginTimeDate = beginTimeDateFor(timeType: timeType)
+        let endTimeDate = Date.today()
+        
+        selectNoteRecordTags(tagNames: tagNameList, beginTime: beginTimeDate, endTime: endTimeDate, completionBlock: completionBlock)
+
+    }
+    
+    
+    func beginTimeDateFor(timeType: TimeFitlerType) -> Date {
+        var beginTimeDate = Date.today()
+        switch timeType {
+        case .week:
+            beginTimeDate = Date.today().previous(.monday, considerToday: true)
+            break
+        case .month:
+            beginTimeDate = Date().startOfCurrentMonth()
+            break
+        case .year:
+            beginTimeDate = Date().startOfCurrentYear()
+            break
+        case .all:
+            beginTimeDate = Date(timeIntervalSince1970: 0)
+            break
+        
+        }
+        return beginTimeDate
+    }
+}
+
 
 class MNDBManager: NSObject {
     
@@ -93,10 +133,15 @@ extension MNDBManager {
         let noteSystemDate = Expression<String>("systemDate")
         // tag name
         let tagName = Expression<String>("tagName")
+        // recordDate
+        let noteRecordDate = Expression<String>("recordDate")
+        
         do {
             try db?.run(table.create { t in
                 t.column(noteSystemDate)
                 t.column(tagName)
+                t.column(noteRecordDate)
+                
             })
         } catch {
             debugPrint("dberror: create table failed. - \("MoneyTagRecordList")")
@@ -141,7 +186,7 @@ extension MNDBManager {
                 guard let `self` = self else {return}
                 // add money tag record
                 for tagModel in model.tagModelList {
-                    self.addMoneyTagRecord(systemDate: model.systemDate, tagName: tagModel.tagName) {
+                    self.addMoneyTagRecord(systemDate: model.systemDate, tagName: tagModel.tagName, recordDate: model.recordDate) {
                         completionBlock?()
                     }
                 }
@@ -171,7 +216,7 @@ extension MNDBManager {
     func selectAllMoneyNoteItem(completionBlock: (([MoneyNoteModel])->Void)?) {
         var moneyNoteList: [MoneyNoteModel] = []
         do {
-            if let results = try db?.prepare("select * from MoneyNoteList ORDER BY systemDate DESC;") {
+            if let results = try db?.prepare("select * from MoneyNoteList ORDER BY recordDate DESC;") {
                 for row in results {
                     
                     let sysDate_m = row[0] as? String ?? ""
@@ -201,7 +246,7 @@ extension MNDBManager {
         
         var moneyNoteList: [MoneyNoteModel] = []
         do {
-            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY systemDate DESC;") {
+            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY recordDate DESC;") {
                 for row in results {
                     
                     let sysDate_m = row[0] as? String ?? ""
@@ -261,9 +306,9 @@ extension MNDBManager {
 
 extension MNDBManager {
     // TagRecordList
-    func addMoneyTagRecord(systemDate: String, tagName: String, completionBlock: (()->Void)?) {
+    func addMoneyTagRecord(systemDate: String, tagName: String, recordDate: String, completionBlock: (()->Void)?) {
         do {
-            let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName) VALUES (?,?)")
+            let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName, recordDate) VALUES (?,?,?)")
             try insetSql?.run([systemDate, tagName])
         } catch {
             
@@ -287,19 +332,23 @@ extension MNDBManager {
     }
     
     // TagRecordList
-    func selectNoteRecordTags(tagNames: [String], completionBlock: (([MoneyNoteModel])->Void)?) {
+    func selectNoteRecordTags(tagNames: [String], beginTime: Date, endTime: Date, completionBlock: (([MoneyNoteModel])->Void)?) {
         do {
+            let beginTimeStr = CLongLong(round(beginTime.unixTimestamp*1000)).string
+            let endTimeStr = CLongLong(round(endTime.unixTimestamp*1000)).string
+            
             var moneyNoteList: [MoneyNoteModel] = []
             
-            
-            var wherelist: [String] = []
-            for tag in tagNames {
-                wherelist.append("tagName = \"\(tag)\"")
+            var whereStr = ""
+            if tagNames.count >= 1 {
+                var wherelist: [String] = []
+                for tag in tagNames {
+                    wherelist.append("tagName = \"\(tag)\"")
+                }
+                let str = wherelist.joined(separator: " OR ")
+                whereStr = "WHERE \(str)"
+                whereStr = whereStr.appending(" WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY recordDate DESC;")
             }
-            
-            let str = wherelist.joined(separator: " OR ")
-            let whereStr = "WHERE \(str)"
-            
             
             if let results = try db?.prepare("select * from MoneyTagRecordList \(whereStr);") {
                 var sysDateList: [String] = []
@@ -406,8 +455,6 @@ extension MNDBManager {
     
     
 }
-
-
 
 
 

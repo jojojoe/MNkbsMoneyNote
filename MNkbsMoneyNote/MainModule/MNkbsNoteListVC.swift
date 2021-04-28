@@ -25,7 +25,8 @@ class MNkbsNoteListVC: UIViewController {
     //
     let timeFilterView = MNkbsTimeFilterView()
     let tagFilterView = MNkbsTagFilterView()
-    
+    var currentTimeType: TimeFitlerType = .month
+    var currentTagsNameList: [String] = []
     
     
     override func viewDidLoad() {
@@ -60,7 +61,7 @@ extension MNkbsNoteListVC {
 
         topTitleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         topTitleLabel.textColor = .white
-        topTitleLabel.text = "账本"
+        topTitleLabel.text = "明细"
         view.addSubview(topTitleLabel)
         topTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backBtn)
@@ -69,7 +70,7 @@ extension MNkbsNoteListVC {
             $0.width.greaterThanOrEqualTo(10)
         }
         //
-
+        
         view.addSubview(insightBtn)
         insightBtn.backgroundColor = .lightGray
         insightBtn.setImage(UIImage(named: ""), for: .normal)
@@ -203,6 +204,7 @@ extension MNkbsNoteListVC {
             [weak self] timeFilterType in
             guard let `self` = self else {return}
             debugPrint(timeFilterType)
+            self.filterTimeNoteList(timetype: timeFilterType)
         }
         timeFilterView.backBtnBlock = {
             DispatchQueue.main.async {
@@ -231,6 +233,7 @@ extension MNkbsNoteListVC {
             [weak self] tagList in
             guard let `self` = self else {return}
             debugPrint(tagList)
+            self.filterTagNoteList(tagList: tagList)
         }
         tagFilterView.backBtnBlock = {
             DispatchQueue.main.async {
@@ -335,9 +338,39 @@ extension MNkbsNoteListVC {
     }
     
     func showNoteEditVC(item: MoneyNoteModel) {
+        let reeditVC = MNkbsReeditVC(noteItem: item)
+        self.present(reeditVC, animated: true, completion: nil)
         
     }
     
+}
+
+extension MNkbsNoteListVC {
+    func filterTimeNoteList(timetype: TimeFitlerType) {
+        currentTimeType = timetype
+        //
+        fetchCurrentNoteItemList()
+    }
+    func filterTagNoteList(tagList: [MNkbsTagItem]) {
+        let tagNameList = tagList.compactMap { (item) -> String in
+            item.tagName
+        }
+        currentTagsNameList = tagNameList
+        //
+        fetchCurrentNoteItemList()
+    }
+    
+    func fetchCurrentNoteItemList() {
+        MNDBManager.default.filterNote(tagNameList: currentTagsNameList, timeType: currentTimeType) {
+            [weak self] noteList in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.noteList = noteList
+                self.collection.reloadData()
+                self.updateTotalPrice()
+            }
+        }
+    }
 }
 
 extension MNkbsNoteListVC: UICollectionViewDataSource {

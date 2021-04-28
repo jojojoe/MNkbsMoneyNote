@@ -79,3 +79,123 @@ public class Once {
 }
 
 
+
+extension Date {
+    
+    static func today() -> Date {
+        return Date()
+    }
+    
+    func next(_ weekday: Weekday, considerToday: Bool = false) -> Date {
+        return get(.Next,
+                   weekday,
+                   considerToday: considerToday)
+    }
+    
+    func previous(_ weekday: Weekday, considerToday: Bool = false) -> Date {
+        return get(.Previous,
+                   weekday,
+                   considerToday: considerToday)
+    }
+    
+    func get(_ direction: SearchDirection,
+             _ weekDay: Weekday,
+             considerToday consider: Bool = false) -> Date {
+        let dayName = weekDay.rawValue
+        let weekdaysName = getWeekDaysInEnglish().map { $0.lowercased() }
+        assert(weekdaysName.contains(dayName),"weekday symbol should be in form (weekdaysName)")
+        let searchWeekdayIndex = weekdaysName.index(of: dayName)! + 1
+        let calendar = Calendar(identifier:. gregorian)
+        if consider && calendar.component(.weekday, from: self) == searchWeekdayIndex {
+            return self
+        }
+        var nextDateComponent = DateComponents()
+        nextDateComponent.weekday = searchWeekdayIndex
+        let date = calendar.nextDate(after: self,
+                                     matching: nextDateComponent,
+                                     matchingPolicy:. nextTime,
+                                     direction: direction.calendarSearchDirection)
+        
+        return date!
+    }
+}
+
+
+extension Date {
+    //本月开始日期
+    func startOfCurrentMonth() -> Date {
+        let date = self
+        let calendar = Calendar(identifier:. gregorian)
+        let components = calendar.dateComponents(
+            Set<Calendar.Component>([.year, .month]), from: date)
+        let startOfMonth = calendar.date(from: components)!
+        return startOfMonth
+    }
+     
+    //本月结束日期
+    func endOfCurrentMonth(returnEndTime:Bool = true) -> Date {
+        let calendar = Calendar(identifier:. gregorian)
+        var components = DateComponents()
+        components.month = 1
+        if returnEndTime {
+            components.second = -1
+        } else {
+            components.day = -1
+        }
+         
+        let endOfMonth =  calendar.date(byAdding: components, to: startOfCurrentMonth())!
+        return endOfMonth
+    }
+    //本年开始日期
+    func startOfCurrentYear() -> Date {
+        let date = self
+        let calendar = Calendar(identifier:. gregorian)
+        let components = calendar.dateComponents(Set<Calendar.Component>([.year]), from: date)
+        let startOfYear = calendar.date(from: components)!
+        return startOfYear
+    }
+     
+    //本年结束日期
+    func endOfCurrentYear(returnEndTime:Bool = true) -> Date {
+        let calendar = Calendar(identifier:. gregorian)
+        var components = DateComponents()
+        components.year = 1
+        if returnEndTime {
+            components.second = -1
+        } else {
+            components.day = -1
+        }
+         
+        let endOfYear = calendar.date(byAdding: components, to: startOfCurrentYear())!
+        return endOfYear
+    }
+}
+
+
+//MARK: Helper methods
+
+
+extension Date {
+    func getWeekDaysInEnglish() -> [String] {
+        var calendar = Calendar(identifier:. gregorian)
+        calendar.locale = Locale(identifier:"en_US_POSIX")
+        return calendar.weekdaySymbols
+    }
+    enum Weekday: String {
+        case monday, tuesday, wednesday, thursday, friday, saturday, sunday
+    }
+    
+    enum SearchDirection {
+        case Next
+        case Previous
+        var calendarSearchDirection: Calendar.SearchDirection {
+            switch self {
+            case .Next:
+                return .forward
+            case .Previous:
+                return .backward
+            }
+        }
+    }
+}
+
