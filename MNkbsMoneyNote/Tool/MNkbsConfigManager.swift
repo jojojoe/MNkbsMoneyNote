@@ -6,6 +6,21 @@
 //
 
 import UIKit
+import Defaults
+import NoticeObserveKit
+
+
+var AppName: String = "App_Name"
+var AppBundleID: String = "com.xxx"
+var IAPsharedSecret: String = ""
+var uploadSubscriptionInfoURLStr: String = "https://"
+
+
+public enum IAPType: String {
+    case year = "IAP_id_year"
+    case month = "IAP_id_month"
+    
+}
 
 enum CurrencySymbol: String {
     case CNY = "¥"
@@ -13,6 +28,19 @@ enum CurrencySymbol: String {
 }
 
 let key_CurrencySymbol = "key_CurrencySymbol"
+
+
+let FONT_MONTSERRAT_BOLDITALIC: String = "Montserrat-BoldItalic"
+let FONT_MONTSERRAT_BOLD: String = "Montserrat-Bold"
+let FONT_MONTSERRAT_MEDIUM: String = "Montserrat-Medium"
+let FONT_MONTSERRAT_SEMIBOLD: String = "Montserrat-SemiBold"
+let FONT_MONTSERRAT_REGULAR: String = "Montserrat-Regular"
+let FONT_AvenirNextCondensedDemiBold: String = "AvenirNextCondensed-DemiBold"
+let FONT_AvenirNextDemiBold: String = "AvenirNext-DemiBold"
+let FONT_AvenirNextBold: String = "AvenirNext-Bold"
+let FONT_AvenirHeavy: String = "Avenir-Heavy"
+let FONT_AvenirMedium: String = "Avenir-Medium"
+
 
 class MNkbsSettingManager: UIView {
 
@@ -146,31 +174,35 @@ struct MNkbsTagItem: Codable {
         return dict
     }
     
-    
 }
 
 class MNkbsTagManager {
     static let `default` = MNkbsTagManager()
     
-    func tagList() -> [MNkbsTagItem] {
-        let tag1 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "支出")
-        let tag2 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "收入")
-        let tag3 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "饮食")
-        let tag4 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "娱乐")
-        let tag5 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "衣服")
-        let tag6 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "打车")
-        let tag7 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "租房")
-        let tag8 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "罚款")
-        let tag9 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "玩")
-        let tag10 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "午饭")
-        let tag11 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "晚饭")
-        let tag12 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "买玩具")
-        let tag13 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "搬家")
-        let tag14 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "加班补助")
-        let tag15 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "买房还贷款")
-        let tag16 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "奶粉钱")
+    func testtagList() -> [MNkbsTagItem] {
+        let tag1 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "1")
+        let tag2 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "2")
+        let tag3 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "3")
+        let tag4 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "4")
+        let tag5 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "5")
+        let tag6 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "6")
+        let tag7 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "7")
+        let tag8 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "8")
+        let tag9 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "9")
+        let tag10 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "10")
+        let tag11 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "11")
+        let tag12 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "12")
+        let tag13 = MNkbsTagItem.init(bgColor: "#FCD567", tagName: "13")
+        let tag14 = MNkbsTagItem.init(bgColor: "#FF5858", tagName: "14")
+        let tag15 = MNkbsTagItem.init(bgColor: "#3C62D1", tagName: "15")
+        let tag16 = MNkbsTagItem.init(bgColor: "#EC74AD", tagName: "16")
         
         let list = [tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10, tag11, tag12, tag13, tag14, tag15, tag16]
+        
+        //
+        
+        
+        
         return list
         
     }
@@ -178,21 +210,36 @@ class MNkbsTagManager {
 }
 
 
-class MNkbsCurrentRecordManager {
-    static let `default` = MNkbsCurrentRecordManager()
+class MNkbsBgColorManager {
+    static let `default` = MNkbsBgColorManager()
+    var colorList: [String] = ["#000000", "#FF0000", "#FFFF00", "#FF00FF", "#0000FF", "#FFF000", "#00F0FF", "#0F00F0", "#7F0204", "#FF7021"]
     
-    var priceStr: String = ""
-    var remark: String = ""
-    var recordDate: Date = Date()
-    var systemDate: Date = Date()
-    var tagList: [[String:String]] = []
-    // {"bgColor": "", "tagName": ""}
      
-    
-    
-    func clearCurrentRecord() {
-        
-    }
     
 }
 
+
+extension Defaults.Keys {
+    static let localIAPReceiptInfo = Key<Data?>("PurchaseManager.localIAPReceiptInfo")
+    static let localIAPProducts = Key<[PurchaseManager.IAPProduct]?>("PurchaseManager.LocalIAPProducts")
+    static let localIAPCacheTime = Key<TimeInterval?>("PurchaseManager.localIAPCacheTime")
+    
+}
+
+extension Notice.Names {
+    static let receiptInfoDidChange =
+        Notice.Name<Any?>(name: "ReceiptInfoDidChange")
+}
+ 
+extension Notice.Names {
+    
+    static let mn_noti_TagRefresh = Notice.Name<Any?>(name: "mn_noti_TagRefresh")
+    
+    
+    
+//    Notice.Center.default.post(name: Notice.Names.receiptInfoDidChange, with: nil)
+//    NotificationCenter.default.nok.observe(name: .keyboardWillShow) { keyboardInfo in
+//        print(keyboardInfo)
+//    }
+//    .invalidated(by: pool)
+}

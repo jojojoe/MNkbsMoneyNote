@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Memes</string>
+	<string>Note</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,6 +20,8 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -51,6 +53,8 @@
 	<string>App needs your photo gallery permission to choose photo and edit it grid, shape, filter add stickers, text, and other effect.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App needs your photo gallery permission to choose and save photo and edit it grid, shape, filter add stickers, text, and other effect.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This identifier will be used to personalize ads to you</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>IBMPlexSans-Medium.otf</string>
@@ -101,5 +105,7 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

@@ -73,6 +73,12 @@ extension MNkbsMainVC {
             guard let `self` = self else {return}
             self.numberBar.refreshNumberBarEqual(isShow: isShow)
         }
+        inputPreview.didUpdateCurrentTagsBlock = {
+            [weak self] tagList in
+            guard let `self` = self else {return}
+            self.tagView.udpateCurrentSelectTagList(tagList: tagList)
+        }
+        inputPreview.isShowTagDeleteBtn = true
         view.addSubview(inputPreview)
         inputPreview.snp.makeConstraints {
             $0.top.equalTo(topBar.snp.bottom).offset(6)
@@ -87,6 +93,13 @@ extension MNkbsMainVC {
             [weak self] selectTagList in
             guard let `self` = self else {return}
             self.inputPreview.updateTagCollection(tags: selectTagList)
+        }
+        tagView.editTagBtnClickBlock = {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.showTagEditVC()
+            }
         }
         view.addSubview(tagView)
         tagView.snp.makeConstraints {
@@ -179,15 +192,18 @@ extension MNkbsMainVC {
 
 extension MNkbsMainVC {
     @objc func settingBtnClick(sender: UIButton) {
-        
+        self.navigationController?.pushViewController(MNkbsSettingVC())
     }
     @objc func insightBtnClick(sender: UIButton) {
-        let noteListVC = MNkbsNoteListVC()
-        self.navigationController?.pushViewController(noteListVC)
-            
+        self.navigationController?.pushViewController(MNkbsNoteListVC())
     }
     
 }
 
 
+extension MNkbsMainVC {
+    func showTagEditVC() {
+        self.present(MNkbsTagEditVC(), animated: true, completion: nil)
+    }
+}
 

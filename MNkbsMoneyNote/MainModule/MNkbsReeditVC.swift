@@ -49,10 +49,9 @@ class MNkbsReeditVC: UIViewController {
 extension MNkbsReeditVC {
     func setupCurrentNoteItemContent() {
         inputPreview.fetchContentWith(noteItem: currentNoteItem)
+        tagView.udpateCurrentSelectTagList(tagList: currentNoteItem.tagModelList)
         self.numberBar.refreshDoneStatus(isEnable: true)
     }
-    
-    
     
 }
 
@@ -61,7 +60,7 @@ extension MNkbsReeditVC {
         
         topTitleLabel.font = UIFont(name: "ArialRoundedMTBold", size: 16)
         topTitleLabel.text = "Edit"
-        topTitleLabel.textColor = UIColor.black
+        topTitleLabel.textColor = UIColor.white
         view.addSubview(topTitleLabel)
         topTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -72,7 +71,7 @@ extension MNkbsReeditVC {
         //
 
         backBtn.setTitle("back", for: .normal)
-        backBtn.setTitleColor(.black, for: .normal)
+        backBtn.setTitleColor(.white, for: .normal)
         view.addSubview(backBtn)
         backBtn.snp.makeConstraints {
             $0.centerY.equalTo(topTitleLabel)
@@ -94,6 +93,12 @@ extension MNkbsReeditVC {
             guard let `self` = self else {return}
             self.numberBar.refreshNumberBarEqual(isShow: isShow)
         }
+        inputPreview.didUpdateCurrentTagsBlock = {
+            [weak self] tagList in
+            guard let `self` = self else {return}
+            self.tagView.udpateCurrentSelectTagList(tagList: tagList)
+        }
+        inputPreview.isShowTagDeleteBtn = true
         view.addSubview(inputPreview)
         inputPreview.snp.makeConstraints {
             $0.top.equalTo(topTitleLabel.snp.bottom).offset(6)
@@ -141,7 +146,7 @@ extension MNkbsReeditVC {
 
 extension MNkbsReeditVC {
     @objc func backBtnClick(sender: UIButton) {
-        
+        self.dismiss(animated: true, completion: nil)
     }
 }
 extension MNkbsReeditVC {

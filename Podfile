@@ -18,7 +18,7 @@ target 'MNkbsMoneyNote' do
     pod 'ZKProgressHUD'
     pod 'SwiftyJSON'
     pod 'SQLite.swift'
-    
+    pod 'AAInfographics', :git => 'https://github.com/AAChartModel/AAChartKit-Swift.git'
     
   # store
     pod 'SwiftyStoreKit'

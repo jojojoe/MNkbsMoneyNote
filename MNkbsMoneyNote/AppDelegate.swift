@@ -14,7 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var mainVC: MNkbsMainVC = MNkbsMainVC()
-
+//    var mainVC: MNkbsTagEditVC = MNkbsTagEditVC()
+    
+//    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
+//    var mainVC: MNkbsInsightVC = MNkbsInsightVC()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
         var beginTimeDate = Date.today().previous(.monday, considerToday: true)
@@ -55,9 +59,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let model = MoneyNoteModel(sysDate: timestamp, recorDate: timestamp, price: "13.3", remark: "eat meet", tagJson: tagListd.toString, tagModel: tagList)
         // insert
-//        MNDBManager.default.addMoneyNoteItem(model: model) {
-//            debugPrint("add complete")
-//        }
+        MNDBManager.default.addMoneyNoteItem(model: model) {
+            debugPrint("add complete")
+        }
         
         // load
 //        MNDBManager.default.selectAllMoneyNoteItem { (list) in
@@ -99,6 +103,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupIAP()
         registerNotifications(application)
         
+//        MNkbsInsightManager.default.loadAllRecordYearsMonths()
+        
+//        MNkbsInsightManager.default.fetchInsightDaysMoney(dateMonthString: "2021-06") { list in
+//
+//        }
+        
+        MNkbsInsightManager.default.fetchInsightMonthsMoney(dateYearString: "2021") { list in
+            
+        }
+        
+//        MNkbsInsightManager.default.fetchGouCheng(beginTime: Date.init(timeIntervalSince1970: 0), endTime: Date()) { insightGouchengList in
+//            debugPrint("insightGouchengList = \(insightGouchengList)")
+//        }
+//        MNkbsInsightManager.default.fetchPaiHang(beginTime: Date.init(timeIntervalSince1970: 0), endTime: Date()) {
+//            insightPaihangList in
+//                debugPrint("insightPaihangList = \(insightPaihangList)")
+//        }
         
         
         

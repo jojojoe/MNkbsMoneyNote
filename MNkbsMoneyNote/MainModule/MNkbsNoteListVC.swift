@@ -233,7 +233,12 @@ extension MNkbsNoteListVC {
             [weak self] tagList in
             guard let `self` = self else {return}
             debugPrint(tagList)
-            self.filterTagNoteList(tagList: tagList)
+            if tagList.count == 0 {
+                self.loadNoteListData()
+            } else {
+                self.filterTagNoteList(tagList: tagList)
+            }
+            
         }
         tagFilterView.backBtnBlock = {
             DispatchQueue.main.async {
@@ -265,9 +270,15 @@ extension MNkbsNoteListVC {
         debugPrint("show 统计view")
     }
     @objc func timeFilterTapGesClick(gesture: UIGestureRecognizer) {
+        if tagFilterView.isShowStatus == true {
+            tagFilterView.showContentStatus(isShow: false)
+        }
         timeFilterView.showContentStatus(isShow: !timeFilterView.isShowStatus)
     }
     @objc func tagFilterTapGesClick(gesture: UIGestureRecognizer) {
+        if timeFilterView.isShowStatus == true {
+            timeFilterView.showContentStatus(isShow: false)
+        }
         tagFilterView.showContentStatus(isShow: !tagFilterView.isShowStatus)
     }
     
@@ -380,6 +391,7 @@ extension MNkbsNoteListVC: UICollectionViewDataSource {
         //
         let item = noteList[indexPath.item]
         let notePreivew = MNkbsInputPreview()
+        notePreivew.isShowTagDeleteBtn = false
         notePreivew.fetchContentWith(noteItem: item, isEnableEditing: false)
         cell.contentView.removeSubviews()
         cell.contentView.addSubview(notePreivew)
