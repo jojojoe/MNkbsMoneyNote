@@ -12,7 +12,7 @@ import SwiftyJSON
 struct MoneyNoteModel {
     
     var systemDate: String // 唯一标识符
-    var recordDate: String
+    var recordDate: String // 时间戳字符串
     var priceStr: String
     var remarkStr: String
     var tagJsonStr: String = ""
@@ -32,14 +32,7 @@ struct MoneyNoteModel {
 
 
 extension MNDBManager {
-//    func filterNote(timeType: TimeFitlerType, completionBlock: (([MoneyNoteModel])->Void)?) {
-//
-//        var beginTimeDate = beginTimeDateFor(timeType: timeType)
-//        var endTimeDate = Date.today()
-//
-////        selectMoneyNoteItem(beginTime: beginTimeDate, endTime: endTimeDate, completionBlock: completionBlock)
-//    }
-    
+
     func filterNote(tagNameList: [String], timeType: TimeFitlerType, completionBlock: (([MoneyNoteModel])->Void)?) {
       
         let beginTimeDate = beginTimeDateFor(timeType: timeType)
@@ -138,7 +131,7 @@ extension MNDBManager {
         
         do {
             try db?.run(table.create { t in
-                t.column(noteSystemDate)
+                t.column(noteSystemDate, primaryKey: true)
                 t.column(tagName)
                 t.column(noteRecordDate)
                 
@@ -152,11 +145,11 @@ extension MNDBManager {
     /// 创建 TagList TABLE
     fileprivate func createTagListTable() {
         let table = Table("TagList")
-        // money note 记录的 systemDate
+        
         let tagName = Expression<String>("tagName")
         // tag name
         let tagColor = Expression<String>("tagColor")
-        // tagIndex
+        // tagIndex 更改顺序 排序用
         let tagIndex = Expression<String>("tagIndex")
         
         
@@ -239,14 +232,14 @@ extension MNDBManager {
             debugPrint("dberror: load favorites failed")
         }
     }
-    
-    func selectMoneyNoteItem(beginTime: Date, endTime: Date, completionBlock: (([MoneyNoteModel])->Void)?) {
+    // priceStr  recordDate
+    func selectMoneyNoteItem(beginTime: Date, endTime: Date, _ orderBy: String = "recordDate", completionBlock: (([MoneyNoteModel])->Void)?) {
         let beginTimeStr = CLongLong(round(beginTime.unixTimestamp*1000)).string
         let endTimeStr = CLongLong(round(endTime.unixTimestamp*1000)).string
         
         var moneyNoteList: [MoneyNoteModel] = []
         do {
-            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY recordDate DESC;") {
+            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' ORDER BY \(orderBy) DESC;") {
                 for row in results {
                     
                     let sysDate_m = row[0] as? String ?? ""
@@ -256,7 +249,6 @@ extension MNDBManager {
                     let tagJson_m = row[4] as? String ?? ""
                     let data = try JSON.init(parseJSON: tagJson_m).rawData()
                     let tagListModel = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
-                    
                     
                     let item = MoneyNoteModel(sysDate: sysDate_m, recorDate: recorDate_m, price: price_m, remark: remark_m, tagJson: tagJson_m, tagModel: tagListModel)
                     
@@ -268,36 +260,6 @@ extension MNDBManager {
         } catch {
             debugPrint("dberror: load favorites failed")
         }
-    }
-    
-    // MoneyNoteModel
-    func selectMoneyNoteItem(minMoneySysDate: String, maxMoneySysDate: String, completionBlock: (([MoneyNoteModel])->Void)?) {
-        var moneyNoteList: [MoneyNoteModel] = []
-        do {
-            if let results = try db?.prepare("select * from MoneyNoteList WHERE recordDate BETWEEN \(minMoneySysDate) AND \(maxMoneySysDate);") {
-                for row in results {
-                    
-                    let sysDate_m = row[0] as? String ?? ""
-                    let recorDate_m = row[1] as? String ?? ""
-                    let price_m = row[2] as? String ?? ""
-                    let remark_m = row[3] as? String ?? ""
-                    let tagJson_m = row[4] as? String ?? ""
-                    let data = try JSON.init(parseJSON: tagJson_m).rawData()
-                    let tagListModel = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
-                    
-                    
-                    let item = MoneyNoteModel(sysDate: sysDate_m, recorDate: recorDate_m, price: price_m, remark: remark_m, tagJson: tagJson_m, tagModel: tagListModel)
-                    
-                    moneyNoteList.append(item)
-                }
-            }
-            completionBlock?(moneyNoteList)
-            
-        } catch {
-            debugPrint("dberror: load favorites failed")
-        }
-        
-        
     }
     
 }
@@ -309,7 +271,7 @@ extension MNDBManager {
     func addMoneyTagRecord(systemDate: String, tagName: String, recordDate: String, completionBlock: (()->Void)?) {
         do {
             let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName, recordDate) VALUES (?,?,?)")
-            try insetSql?.run([systemDate, tagName])
+            try insetSql?.run([systemDate, tagName, recordDate])
         } catch {
             
         }
@@ -343,11 +305,13 @@ extension MNDBManager {
             if tagNames.count >= 1 {
                 var wherelist: [String] = []
                 for tag in tagNames {
-                    wherelist.append("tagName = \"\(tag)\"")
+                    //"tagName = '\(tag)'"
+                    //"tagName = '\"'\(tag)\""
+                    wherelist.append("tagName = '\(tag)'")
                 }
                 let str = wherelist.joined(separator: " OR ")
                 whereStr = "WHERE \(str)"
-                whereStr = whereStr.appending(" WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' AND ORDER BY recordDate DESC;")
+                whereStr = whereStr.appending(" AND recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' ORDER BY recordDate DESC")
             }
             
             if let results = try db?.prepare("select * from MoneyTagRecordList \(whereStr);") {
@@ -437,8 +401,8 @@ extension MNDBManager {
             if let results = try db?.prepare("select * from TagList ORDER BY tagIndex ASC;") {
                 for row in results {
                     
-                    let bgColor_m = row[0] as? String ?? ""
-                    let tagName_m = row[1] as? String ?? ""
+                    let tagName_m = row[0] as? String ?? ""
+                    let bgColor_m = row[1] as? String ?? ""
                     let tagIndex_m = row[2] as? String ?? ""
                     
                     

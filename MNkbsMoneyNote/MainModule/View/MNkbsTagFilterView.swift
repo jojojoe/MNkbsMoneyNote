@@ -62,9 +62,18 @@ extension MNkbsTagFilterView {
 }
 
 extension MNkbsTagFilterView {
-    func contentViewHeight() -> CGFloat {
-        return CGFloat(MNkbsTagManager.default.tagList().count * 44)
-    }
+    
+//    func loadData() {
+//        MNDBManager.default.selectTagList { tagList in
+//            DispatchQueue.main.async {
+//                [weak self] in
+//                guard let `self` = self else {return}
+//                self.tagList = tagList
+//                self.collection.reloadData()
+//            }
+//        }
+//    }
+    
     func setupView() {
         backgroundColor = .clear
         layer.masksToBounds = true

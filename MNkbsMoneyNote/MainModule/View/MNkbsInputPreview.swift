@@ -19,6 +19,10 @@ class MNkbsInputPreview: UIView {
     var currentNumberStr: String = ""
     let remarkTextView = UITextView()
     let datePicker = UIDatePicker()
+    var didUpdateCurrentTagsBlock: (([MNkbsTagItem])->Void)?
+    var isShowTagDeleteBtn: Bool = false
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,7 +54,7 @@ extension MNkbsInputPreview {
         collection.reloadData()
         //
         remarkTextView.text = noteItem.remarkStr
-        //
+        //MARK: 时间戳转Date
         let timestamp = noteItem.recordDate    
         //CLongLong(round(Date().unixTimestamp*1000)).string
         let dou = Double(timestamp) ?? 0
@@ -294,13 +298,13 @@ extension MNkbsInputPreview {
         remarkTextView.textColor = UIColor.darkGray
         remarkTextView.font = UIFont(name: "AvenirNext-Medium", size: 13)
         remarkTextView.placeholder = "备注..."
-        topBgView.addSubview(remarkTextView)
-        remarkTextView.snp.makeConstraints {
-            $0.left.equalTo(numberLabel.snp.right).offset(10)
-            $0.top.equalTo(numberLabel)
-            $0.height.equalToSuperview()
-            $0.right.equalTo(0)
-        }
+//        topBgView.addSubview(remarkTextView)
+//        remarkTextView.snp.makeConstraints {
+//            $0.left.equalTo(numberLabel.snp.right).offset(10)
+//            $0.top.equalTo(numberLabel)
+//            $0.height.equalToSuperview()
+//            $0.right.equalTo(0)
+//        }
         //
         let tagLabel = UILabel()
         tagLabel.font = UIFont(name: "AvenirNext-Medium", size: 14)
@@ -351,6 +355,16 @@ extension MNkbsInputPreview {
     
 }
 
+extension MNkbsInputPreview {
+    func deleteTag(item: MNkbsTagItem) {
+        tagsList.removeFirst {
+            $0.tagName == item.tagName
+        }
+        collection.reloadData()
+        didUpdateCurrentTagsBlock?(tagsList)
+    }
+}
+
 extension MNkbsInputPreview: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -359,7 +373,19 @@ extension MNkbsInputPreview: UICollectionViewDataSource {
         cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
         cell.tagNameLabel.text = item.tagName
         cell.layer.cornerRadius = 6
-        cell.layer.masksToBounds = true
+        cell.layer.masksToBounds = false
+        if isShowTagDeleteBtn {
+            cell.deleteBtn.isHidden = false
+        } else {
+            cell.deleteBtn.isHidden = true
+        }
+        cell.deleteClickBlock = {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.deleteTag(item: item)
+            }
+        }
         return cell
     }
     
@@ -430,7 +456,8 @@ extension MNkbsInputPreview: UITextViewDelegate {
 class MNkbsInputPreviewTagCell: UICollectionViewCell {
     let contentImgV = UIImageView()
     let tagNameLabel = UILabel()
-    
+    let deleteBtn = UIButton(type: .custom)
+    var deleteClickBlock: (()->Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -462,7 +489,19 @@ class MNkbsInputPreviewTagCell: UICollectionViewCell {
             $0.right.equalTo(-6)
             $0.top.equalTo(0)
         }
+        //
+        contentView.addSubview(deleteBtn)
+        deleteBtn.snp.makeConstraints {
+            $0.top.left.equalToSuperview().offset(-12)
+            $0.width.height.equalTo(30)
+        }
+        deleteBtn.setImage(UIImage(named: "tagdeletebtn"), for: .normal)
+        deleteBtn.addTarget(self, action: #selector(deleteBtnClick(sender:)), for: .touchUpInside)
         
+    }
+    
+    @objc func deleteBtnClick(sender: UIButton) {
+        deleteClickBlock?()
     }
 }
 

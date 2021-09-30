@@ -13,7 +13,7 @@ class MNkbsInputTagView: UIView {
     var tagList: [MNkbsTagItem] =  []
     var currentSelectTagList: [MNkbsTagItem] =  []
     var selectTagBlock: (([MNkbsTagItem])->Void)?
-    
+    var editTagBtnClickBlock: (()->Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -25,8 +25,18 @@ class MNkbsInputTagView: UIView {
     }
     
     func loadData() {
-        tagList = MNkbsTagManager.default.tagList()
-        collection.reloadData()
+        
+        
+        MNDBManager.default.selectTagList { tagList in
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.tagList = tagList
+                self.collection.reloadData()
+            }
+        }
+        
+        
     }
 
 }
@@ -37,11 +47,45 @@ extension MNkbsInputTagView {
         collection.reloadData()
         
     }
+    
+    func udpateCurrentSelectTagList(tagList: [MNkbsTagItem]) {
+        currentSelectTagList = tagList
+        collection.reloadData()
+    }
 }
 
 extension MNkbsInputTagView {
     func setupView() {
+        //
         
+        //
+        let tagEditBtn = UIButton(type: .custom)
+        addSubview(tagEditBtn)
+        tagEditBtn.setTitle("Edit Tag", for: .normal)
+        tagEditBtn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
+        tagEditBtn.setTitleColor(.black, for: .normal)
+        tagEditBtn.backgroundColor = UIColor.white
+        tagEditBtn.layer.cornerRadius = 8
+        tagEditBtn.snp.makeConstraints {
+            $0.top.equalTo(5)
+            $0.right.equalTo(-10)
+            $0.height.equalTo(36)
+            $0.width.equalTo(100)
+        }
+        tagEditBtn.addTarget(self, action: #selector(tagEditBtnClick(sender:)), for: .touchUpInside)
+        //
+        let nameLabel = UILabel()
+        addSubview(nameLabel)
+        nameLabel.text = "选择标签:"
+        nameLabel.textColor = UIColor.white
+        nameLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 17)
+        nameLabel.snp.makeConstraints {
+            $0.left.equalTo(20)
+            $0.centerY.equalTo(tagEditBtn)
+            $0.width.height.greaterThanOrEqualTo(1)
+        }
+        
+        //
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
@@ -52,7 +96,8 @@ extension MNkbsInputTagView {
         collection.dataSource = self
         addSubview(collection)
         collection.snp.makeConstraints {
-            $0.top.bottom.right.left.equalToSuperview()
+            $0.top.equalTo(40)
+            $0.bottom.right.left.equalToSuperview()
         }
         collection.register(cellWithClass: MNkbsInputTagCell.self)
     }
@@ -67,7 +112,12 @@ extension MNkbsInputTagView {
         return numberWidth
     }
     
-     
+    
+    @objc func tagEditBtnClick(sender: UIButton) {
+        editTagBtnClickBlock?()
+    }
+    
+    
 }
 
 extension MNkbsInputTagView: UICollectionViewDataSource {
@@ -149,6 +199,8 @@ class MNkbsInputTagCell: UICollectionViewCell {
     let contentImgV = UIImageView()
     let tagNameLabel = UILabel()
     let selectView = UIView()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -189,6 +241,8 @@ class MNkbsInputTagCell: UICollectionViewCell {
         }
         
     }
+    
+    
 }
 
  

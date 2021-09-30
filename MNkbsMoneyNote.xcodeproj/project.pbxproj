@@ -16,18 +16,29 @@
 		D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BE97F7262A7DA300C3ECD3 /* MNDBManager.swift */; };
 		D8BE98702633DDA700C3ECD3 /* MNkbsTimeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BE986F2633DDA700C3ECD3 /* MNkbsTimeFilterView.swift */; };
 		D8BE98732633DE8A00C3ECD3 /* MNkbsTagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BE98722633DE8A00C3ECD3 /* MNkbsTagFilterView.swift */; };
+		EB000CAF2698603800A55C10 /* MNkbsTagEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */; };
+		EB25F7962643FE550039E1B9 /* MNkbsInsightVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB25F7952643FE550039E1B9 /* MNkbsInsightVC.swift */; };
 		EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33025A261D457900A715EE /* MNkbsInputPreview.swift */; };
+		EB395D15269C72750071A60D /* MNkbsConfigTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB395D14269C72750071A60D /* MNkbsConfigTool.swift */; };
+		EB395D17269C77830071A60D /* MNkbsAddTagEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB395D16269C77830071A60D /* MNkbsAddTagEditView.swift */; };
+		EB395D19269C840E0071A60D /* TaskDelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB395D18269C840E0071A60D /* TaskDelay.swift */; };
 		EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */; };
 		EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */; };
 		EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */; };
 		EB7324F026218F0100EAFFB2 /* MNkbsInputNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */; };
-		EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */; };
+		EB75C4C226252CFF00F0C100 /* MNkbsConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */; };
 		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
 		EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52F2625D68200F0C100 /* JsonConvert.swift */; };
-		EB7DBA222629AE1700C2FAF6 /* DSDBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */; };
 		EB97F2CA263599C60052952D /* MNkbsReeditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */; };
+		EBAAB16D26B17B5A00D89E0C /* UIKit+Simply.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAAB16C26B17B5A00D89E0C /* UIKit+Simply.swift */; };
+		EBAAB16F26B17C1A00D89E0C /* KbsPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAAB16E26B17C1A00D89E0C /* KbsPurchaseManager.swift */; };
 		EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */; };
 		EBD115A2262D579000C07D5E /* MNkbsNoteListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */; };
+		EBD234E5264FC4AD0018F41B /* MNkbsInsightGouChengView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD234E4264FC4AD0018F41B /* MNkbsInsightGouChengView.swift */; };
+		EBD234E7264FE5C00018F41B /* MNkbsInsightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD234E6264FE5C00018F41B /* MNkbsInsightManager.swift */; };
+		EBE866DD26688262008C37B5 /* MNkbsInsightPaiHangView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE866DC26688262008C37B5 /* MNkbsInsightPaiHangView.swift */; };
+		EBE866DF266882A2008C37B5 /* MNkbsInsightDaysChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE866DE266882A2008C37B5 /* MNkbsInsightDaysChart.swift */; };
+		EBE866E1266882B0008C37B5 /* MNkbsInsightMonthsChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE866E0266882B0008C37B5 /* MNkbsInsightMonthsChart.swift */; };
 		F522C41D1C4C1F64DEAF1B34 /* Pods_MNkbsMoneyNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +47,7 @@
 		BB9993203C81E7EA801D0C69 /* Pods-MNkbsMoneyNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MNkbsMoneyNote.release.xcconfig"; path = "Target Support Files/Pods-MNkbsMoneyNote/Pods-MNkbsMoneyNote.release.xcconfig"; sourceTree = "<group>"; };
 		D8BE978825FF956200C3ECD3 /* MNkbsMoneyNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MNkbsMoneyNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8BE978B25FF956200C3ECD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D8BE978D25FF956200C3ECD3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		D8BE978D25FF956200C3ECD3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		D8BE978F25FF956200C3ECD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D8BE979225FF956200C3ECD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8BE979425FF956200C3ECD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -46,18 +57,29 @@
 		D8BE986F2633DDA700C3ECD3 /* MNkbsTimeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsTimeFilterView.swift; sourceTree = "<group>"; };
 		D8BE98722633DE8A00C3ECD3 /* MNkbsTagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsTagFilterView.swift; sourceTree = "<group>"; };
 		DFAFF5DCD1B4316F8432E7F4 /* Pods_MNkbsMoneyNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MNkbsMoneyNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsTagEditVC.swift; sourceTree = "<group>"; };
+		EB25F7952643FE550039E1B9 /* MNkbsInsightVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightVC.swift; sourceTree = "<group>"; };
 		EB33025A261D457900A715EE /* MNkbsInputPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputPreview.swift; sourceTree = "<group>"; };
+		EB395D14269C72750071A60D /* MNkbsConfigTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsConfigTool.swift; sourceTree = "<group>"; };
+		EB395D16269C77830071A60D /* MNkbsAddTagEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsAddTagEditView.swift; sourceTree = "<group>"; };
+		EB395D18269C840E0071A60D /* TaskDelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDelay.swift; sourceTree = "<group>"; };
 		EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsMainVC.swift; sourceTree = "<group>"; };
 		EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingVC.swift; sourceTree = "<group>"; };
 		EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSubscriptionVC.swift; sourceTree = "<group>"; };
 		EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputNumberView.swift; sourceTree = "<group>"; };
-		EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingManager.swift; sourceTree = "<group>"; };
+		EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsConfigManager.swift; sourceTree = "<group>"; };
 		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
 		EB75C52F2625D68200F0C100 /* JsonConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvert.swift; sourceTree = "<group>"; };
-		EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSDBHelper.swift; sourceTree = "<group>"; };
 		EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsReeditVC.swift; sourceTree = "<group>"; };
+		EBAAB16C26B17B5A00D89E0C /* UIKit+Simply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Simply.swift"; sourceTree = "<group>"; };
+		EBAAB16E26B17C1A00D89E0C /* KbsPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KbsPurchaseManager.swift; sourceTree = "<group>"; };
 		EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNExtensionTool.swift; sourceTree = "<group>"; };
 		EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsNoteListVC.swift; sourceTree = "<group>"; };
+		EBD234E4264FC4AD0018F41B /* MNkbsInsightGouChengView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightGouChengView.swift; sourceTree = "<group>"; };
+		EBD234E6264FE5C00018F41B /* MNkbsInsightManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightManager.swift; sourceTree = "<group>"; };
+		EBE866DC26688262008C37B5 /* MNkbsInsightPaiHangView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightPaiHangView.swift; sourceTree = "<group>"; };
+		EBE866DE266882A2008C37B5 /* MNkbsInsightDaysChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightDaysChart.swift; sourceTree = "<group>"; };
+		EBE866E0266882B0008C37B5 /* MNkbsInsightMonthsChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInsightMonthsChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +149,11 @@
 				EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */,
 				D8BE986F2633DDA700C3ECD3 /* MNkbsTimeFilterView.swift */,
 				D8BE98722633DE8A00C3ECD3 /* MNkbsTagFilterView.swift */,
+				EBD234E4264FC4AD0018F41B /* MNkbsInsightGouChengView.swift */,
+				EBE866DC26688262008C37B5 /* MNkbsInsightPaiHangView.swift */,
+				EBE866DE266882A2008C37B5 /* MNkbsInsightDaysChart.swift */,
+				EBE866E0266882B0008C37B5 /* MNkbsInsightMonthsChart.swift */,
+				EB395D16269C77830071A60D /* MNkbsAddTagEditView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -153,6 +180,8 @@
 				EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */,
 				EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */,
 				EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */,
+				EB25F7952643FE550039E1B9 /* MNkbsInsightVC.swift */,
+				EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */,
 				EB330259261D448700A715EE /* View */,
 			);
 			path = MainModule;
@@ -161,7 +190,7 @@
 		EB75C4C026252C5100F0C100 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				EB75C4C126252CFF00F0C100 /* MNkbsSettingManager.swift */,
+				EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -169,8 +198,9 @@
 		EB7DBA202629AE0900C2FAF6 /* DataBaseManager */ = {
 			isa = PBXGroup;
 			children = (
-				EB7DBA212629AE1700C2FAF6 /* DSDBHelper.swift */,
 				D8BE97F7262A7DA300C3ECD3 /* MNDBManager.swift */,
+				EBD234E6264FE5C00018F41B /* MNkbsInsightManager.swift */,
+				EBAAB16E26B17C1A00D89E0C /* KbsPurchaseManager.swift */,
 			);
 			path = DataBaseManager;
 			sourceTree = "<group>";
@@ -180,6 +210,9 @@
 			children = (
 				EB75C52F2625D68200F0C100 /* JsonConvert.swift */,
 				EBC69A9E261EACFF00BD68C6 /* MNExtensionTool.swift */,
+				EB395D14269C72750071A60D /* MNkbsConfigTool.swift */,
+				EB395D18269C840E0071A60D /* TaskDelay.swift */,
+				EBAAB16C26B17B5A00D89E0C /* UIKit+Simply.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -303,17 +336,28 @@
 				EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */,
 				EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */,
 				EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */,
-				EB7DBA222629AE1700C2FAF6 /* DSDBHelper.swift in Sources */,
 				EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */,
-				EB75C4C226252CFF00F0C100 /* MNkbsSettingManager.swift in Sources */,
+				EB75C4C226252CFF00F0C100 /* MNkbsConfigManager.swift in Sources */,
+				EB395D19269C840E0071A60D /* TaskDelay.swift in Sources */,
+				EBE866E1266882B0008C37B5 /* MNkbsInsightMonthsChart.swift in Sources */,
+				EBAAB16D26B17B5A00D89E0C /* UIKit+Simply.swift in Sources */,
+				EBAAB16F26B17C1A00D89E0C /* KbsPurchaseManager.swift in Sources */,
 				D8BE98732633DE8A00C3ECD3 /* MNkbsTagFilterView.swift in Sources */,
+				EBE866DD26688262008C37B5 /* MNkbsInsightPaiHangView.swift in Sources */,
+				EB395D15269C72750071A60D /* MNkbsConfigTool.swift in Sources */,
+				EBD234E7264FE5C00018F41B /* MNkbsInsightManager.swift in Sources */,
 				EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */,
 				EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */,
+				EB000CAF2698603800A55C10 /* MNkbsTagEditVC.swift in Sources */,
 				D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
+				EBE866DF266882A2008C37B5 /* MNkbsInsightDaysChart.swift in Sources */,
+				EBD234E5264FC4AD0018F41B /* MNkbsInsightGouChengView.swift in Sources */,
+				EB25F7962643FE550039E1B9 /* MNkbsInsightVC.swift in Sources */,
 				EBD115A2262D579000C07D5E /* MNkbsNoteListVC.swift in Sources */,
 				EBC69A9F261EACFF00BD68C6 /* MNExtensionTool.swift in Sources */,
 				EB97F2CA263599C60052952D /* MNkbsReeditVC.swift in Sources */,
+				EB395D17269C77830071A60D /* MNkbsAddTagEditView.swift in Sources */,
 				D8BE978E25FF956200C3ECD3 /* SceneDelegate.swift in Sources */,
 				D8BE98702633DDA700C3ECD3 /* MNkbsTimeFilterView.swift in Sources */,
 			);
@@ -475,7 +519,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.next.innovation.MNkbsMoneyNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -497,7 +541,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.next.innovation.MNkbsMoneyNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
