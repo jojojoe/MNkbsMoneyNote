@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var mainVC: MNkbsMainVC = MNkbsMainVC()
-//    var mainVC: MNkbsTagEditVC = MNkbsTagEditVC()
+//    var mainVC: MNkbsTagEditVC = MNkbsTagEditVC() 1
     
 //    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
 //    var mainVC: MNkbsInsightVC = MNkbsInsightVC()
