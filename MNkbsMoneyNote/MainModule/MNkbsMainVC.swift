@@ -10,7 +10,7 @@ import SwifterSwift
 import SnapKit
 import SwiftyJSON
 import ZKProgressHUD
-
+// 废弃
 class MNkbsMainVC: UIViewController {
     let topBar = UIView()
     let settingBtn = UIButton(type: .custom)

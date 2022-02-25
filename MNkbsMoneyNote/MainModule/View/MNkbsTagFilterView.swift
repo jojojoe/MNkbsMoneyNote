@@ -20,6 +20,7 @@ class MNkbsTagFilterView: UIView {
     var isShowStatus: Bool = false
     var backBtnBlock: (()->Void)?
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -124,7 +125,7 @@ extension MNkbsTagFilterView {
     
     
     func setupInputTagView() {
-        
+        tagView.showEditTagBtnStatus(isShow: false)
         tagView.selectTagBlock = {
             [weak self] selectTagList in
             guard let `self` = self else {return}

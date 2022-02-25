@@ -17,9 +17,9 @@ class MNkbsReeditVC: UIViewController {
     let tagView = MNkbsInputTagView()
     let numberBar = MNkbsInputNumberBar()
     
-    let currentNoteItem: MoneyNoteModel
+    let currentNoteItem: MoneyNoteModel?
     
-    init(noteItem: MoneyNoteModel) {
+    init(noteItem: MoneyNoteModel?) {
         currentNoteItem = noteItem
         super.init(nibName: nil, bundle: nil)
         
@@ -48,9 +48,14 @@ class MNkbsReeditVC: UIViewController {
 
 extension MNkbsReeditVC {
     func setupCurrentNoteItemContent() {
-        inputPreview.fetchContentWith(noteItem: currentNoteItem)
-        tagView.udpateCurrentSelectTagList(tagList: currentNoteItem.tagModelList)
-        self.numberBar.refreshDoneStatus(isEnable: true)
+        if let item = currentNoteItem {
+            inputPreview.fetchContentWith(noteItem: item)
+            tagView.udpateCurrentSelectTagList(tagList: item.tagModelList)
+            self.numberBar.refreshDoneStatus(isEnable: true)
+        } else {
+            self.numberBar.refreshDoneStatus(isEnable: false)
+        }
+        
     }
     
 }
@@ -114,6 +119,13 @@ extension MNkbsReeditVC {
             guard let `self` = self else {return}
             self.inputPreview.updateTagCollection(tags: selectTagList)
         }
+        tagView.editTagBtnClickBlock = {
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.showTagEditVC()
+            }
+        }
         view.addSubview(tagView)
         tagView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -143,6 +155,12 @@ extension MNkbsReeditVC {
 }
 
 
+extension MNkbsReeditVC {
+    func showTagEditVC() {
+        self.present(MNkbsTagEditVC(), animated: true, completion: nil)
+    }
+}
+
 
 extension MNkbsReeditVC {
     @objc func backBtnClick(sender: UIButton) {
@@ -153,6 +171,7 @@ extension MNkbsReeditVC {
     func inputNumber(item: MNkbsNumberItem) {
         if item.numberType == .number_done {
             saveCurrentRecordToDB()
+            backBtnClick(sender: backBtn)
         } else {
             self.inputPreview.inputNumber(item: item)
         }
@@ -170,7 +189,7 @@ extension MNkbsReeditVC {
         let remark: String = self.inputPreview.remarkTextView.text
         let recordDateStr: String = CLongLong(round(self.inputPreview.datePicker.date.unixTimestamp*1000)).string
         //使用当前编辑的 note item 的唯一键值 systemDate
-        let systemDateStr: String = self.currentNoteItem.systemDate
+        let systemDateStr: String = self.currentNoteItem?.systemDate ?? CLongLong(round(Date().unixTimestamp*1000)).string
         var tagJsonString: String = ""
         var tagList: [[String:String]] = []
         

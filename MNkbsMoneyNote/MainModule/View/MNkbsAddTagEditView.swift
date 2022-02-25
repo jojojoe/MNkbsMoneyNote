@@ -46,7 +46,7 @@ class MNkbsAddTagEditView: UIView {
             $0.width.equalTo(300)
             $0.height.equalTo(200)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(topContentBg)
+            $0.top.equalTo(topContentBg - 80)
         }
         
         

@@ -10,9 +10,9 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var mainVC: MNkbsMainVC = MNkbsMainVC()
+//    var mainVC: MNkbsMainVC = MNkbsMainVC()
 //    var mainVC: MNkbsTagEditVC = MNkbsTagEditVC()
-//    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
+    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
 //    var mainVC: MNkbsInsightVC = MNkbsInsightVC()
     func initMainVC() {
         let nav = UINavigationController.init(rootViewController: mainVC)

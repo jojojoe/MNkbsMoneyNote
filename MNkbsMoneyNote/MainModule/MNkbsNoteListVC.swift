@@ -8,9 +8,10 @@
 import UIKit
 
 class MNkbsNoteListVC: UIViewController {
-    let backBtn = UIButton(type: .custom)
+    let settingBtn = UIButton(type: .custom)
     let topTitleLabel = UILabel()
     let insightBtn = UIButton(type: .custom)
+    let addNewRecordBtn = UIButton(type: .custom)
     let topEditBar = UIView()
     let timeFilterBgView = UIView()
     let timeFilterLabel = UILabel()
@@ -48,11 +49,11 @@ class MNkbsNoteListVC: UIViewController {
 extension MNkbsNoteListVC {
     func setupView() {
         
-        view.addSubview(backBtn)
-        backBtn.backgroundColor = .lightGray
-        backBtn.setImage(UIImage(named: ""), for: .normal)
-        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
-        backBtn.snp.makeConstraints {
+        view.addSubview(settingBtn)
+        settingBtn.backgroundColor = .lightGray
+        settingBtn.setImage(UIImage(named: ""), for: .normal)
+        settingBtn.addTarget(self, action: #selector(settingBtnClick(sender:)), for: .touchUpInside)
+        settingBtn.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.left.equalTo(10)
             $0.width.height.equalTo(44)
@@ -64,7 +65,7 @@ extension MNkbsNoteListVC {
         topTitleLabel.text = "明细"
         view.addSubview(topTitleLabel)
         topTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(backBtn)
+            $0.centerY.equalTo(settingBtn)
             $0.centerX.equalToSuperview()
             $0.height.greaterThanOrEqualTo(10)
             $0.width.greaterThanOrEqualTo(10)
@@ -190,7 +191,19 @@ extension MNkbsNoteListVC {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         collection.register(cellWithClass: MNkbsNoteListCell.self)
+        
+        //
+        addNewRecordBtn.adhere(toSuperview: view)
+            .backgroundColor(.black)
+        addNewRecordBtn.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-24)
+            $0.width.height.equalTo(60)
+        }
+        addNewRecordBtn.addTarget(self, action: #selector(addNewRecordBtnClick(sender: )), for: .touchUpInside)
     }
+    
+    
     
     func setupTimeFilterView() {
         view.addSubview(timeFilterView)
@@ -258,16 +271,14 @@ extension MNkbsNoteListVC {
 }
 
 extension MNkbsNoteListVC {
-    @objc func backBtnClick(sender: UIButton) {
-        if self.navigationController != nil {
-            self.navigationController?.popViewController(animated: true)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
+    @objc func settingBtnClick(sender: UIButton) {
+        self.navigationController?.pushViewController(MNkbsSettingVC())
     }
     
     @objc func insightBtnClick(sender: UIButton) {
         debugPrint("show 统计view")
+        let vc = MNkbsInsightVC()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc func timeFilterTapGesClick(gesture: UIGestureRecognizer) {
         if tagFilterView.isShowStatus == true {
@@ -281,7 +292,9 @@ extension MNkbsNoteListVC {
         }
         tagFilterView.showContentStatus(isShow: !tagFilterView.isShowStatus)
     }
-    
+    @objc func addNewRecordBtnClick(sender: UIButton) {
+        showNoteEditVC(item: nil)
+    }
 }
 
 extension MNkbsNoteListVC {
@@ -348,7 +361,7 @@ extension MNkbsNoteListVC {
         return model
     }
     
-    func showNoteEditVC(item: MoneyNoteModel) {
+    func showNoteEditVC(item: MoneyNoteModel?) {
         let reeditVC = MNkbsReeditVC(noteItem: item)
         self.present(reeditVC, animated: true, completion: nil)
         

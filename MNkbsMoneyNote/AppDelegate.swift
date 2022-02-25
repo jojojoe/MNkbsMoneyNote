@@ -13,10 +13,10 @@ import SwiftyJSON
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var mainVC: MNkbsMainVC = MNkbsMainVC()
+//    var mainVC: MNkbsMainVC = MNkbsMainVC()
 //    var mainVC: MNkbsTagEditVC = MNkbsTagEditVC() 1
     
-//    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
+    var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
 //    var mainVC: MNkbsInsightVC = MNkbsInsightVC()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

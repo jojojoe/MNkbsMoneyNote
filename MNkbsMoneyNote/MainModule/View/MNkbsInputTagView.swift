@@ -8,7 +8,7 @@
 import UIKit
 
 class MNkbsInputTagView: UIView {
-
+    let tagEditBtn = UIButton(type: .custom)
     var collection: UICollectionView!
     var tagList: [MNkbsTagItem] =  []
     var currentSelectTagList: [MNkbsTagItem] =  []
@@ -18,6 +18,14 @@ class MNkbsInputTagView: UIView {
         super.init(frame: frame)
         setupView()
         loadData()
+    }
+    
+    func showEditTagBtnStatus(isShow: Bool) {
+        if isShow {
+            tagEditBtn.isHidden = false
+        } else {
+            tagEditBtn.isHidden = true
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -59,7 +67,7 @@ extension MNkbsInputTagView {
         //
         
         //
-        let tagEditBtn = UIButton(type: .custom)
+        
         addSubview(tagEditBtn)
         tagEditBtn.setTitle("Edit Tag", for: .normal)
         tagEditBtn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 15)

@@ -12,6 +12,7 @@ enum TimeFitlerType {
     case month
     case year
     case all
+    case custom
 }
 
 class MNkbsTimeFilterView: UIView {
