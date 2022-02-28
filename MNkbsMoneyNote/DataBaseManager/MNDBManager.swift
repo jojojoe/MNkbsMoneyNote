@@ -58,7 +58,9 @@ extension MNDBManager {
         case .all:
             beginTimeDate = Date(timeIntervalSince1970: 0)
             break
-        
+        case .custom:
+            beginTimeDate = Date(timeIntervalSince1970: 0)
+            break
         }
         return beginTimeDate
     }

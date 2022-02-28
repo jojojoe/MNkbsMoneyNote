@@ -61,7 +61,7 @@ class MNkbsInsightManager: NSObject {
         }
     }
     
-    func loadAllRecordYearsMonths() {
+    func loadAllRecordYearsMonths() -> [[String : Any]] {
         var firstDateStr = firstInstallDate.string(withFormat: "yyyy-MM-dd")
         var currentDateStr = Date().string(withFormat: "yyyy-MM-dd")
         
@@ -96,7 +96,6 @@ class MNkbsInsightManager: NSObject {
         let currentYearInt = currentDateYear.int ?? 1001
         let offset = (currentYearInt - firstYearInt)
         if offset > 1 {
-            
             for i in 1..<offset {
                 let year = firstYearInt + i
                 let yearStr = year.string
@@ -115,7 +114,7 @@ class MNkbsInsightManager: NSObject {
         dateList.append(lastDict)
         
         debugPrint("dateList: \(dateList)")
-        
+        return dateList
     }
     
     func fetchTotalPrice(beginTime: Date, endTime: Date, completion: @escaping ((String)->Void)) {
@@ -202,16 +201,26 @@ class MNkbsInsightManager: NSObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
         
-        let currentDate = formatter.date(from: "\(dateMonthString)-01-01-01-01") ?? Date()
+        if dateMonthString.contains("-") {
+            // 某年全年
+            let beginDate = formatter.date(from: "\(dateMonthString)-01-01-00-00-00") ?? Date()
+            let endDate = formatter.date(from: "\(dateMonthString)-12-23-59-59") ?? Date()
+            return(beginDate, endDate, 0)
+        } else {
+            // 某年某月
+            
+            let currentDate = formatter.date(from: "\(dateMonthString)-01-01-01-01") ?? Date()
+            
+            let calendar = Calendar.current
+            let range = calendar.range(of: .day, in: .month, for: currentDate)
+            let numberOfDaysInMonth = range?.count ?? 0
+            debugPrint("\(numberOfDaysInMonth)")
+            
+            let beginDate = formatter.date(from: "\(dateMonthString)-01-00-00-00") ?? Date()
+            let endDate = formatter.date(from: "\(dateMonthString)-\(numberOfDaysInMonth)-23-59-59") ?? Date()
+            return(beginDate, endDate, numberOfDaysInMonth)
+        }
         
-        let calendar = Calendar.current
-        let range = calendar.range(of: .day, in: .month, for: currentDate)
-        let numberOfDaysInMonth = range?.count ?? 0
-        debugPrint("\(numberOfDaysInMonth)")
-        
-        let beginDate = formatter.date(from: "\(dateMonthString)-01-00-00-00") ?? Date()
-        let endDate = formatter.date(from: "\(dateMonthString)-\(numberOfDaysInMonth)-23-59-59") ?? Date()
-        return(beginDate, endDate, numberOfDaysInMonth)
     }
     
     func processMoneyNoteItemRecordTimeToString(noteItemRecordDate: String) -> String {
@@ -235,8 +244,6 @@ class MNkbsInsightManager: NSObject {
         var maxNumberOfDays: Int = 1
         
         let (beginDate, endDate, numberOfDaysInMonth) = processBeginDateAndEndDate(dateMonthString: dateMonthString)
-        
-        
         
         let formatter = DateFormatter()
         formatter.dateFormat = "MM"

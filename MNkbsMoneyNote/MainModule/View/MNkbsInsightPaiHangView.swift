@@ -11,7 +11,7 @@ import UIKit
 class MNkbsInsightPaiHangView: UIView {
 
     var collection: UICollectionView!
-    var moreBtnClickBlock: (()->Void)?
+    var moreBtnClickBlock: (([MoneyNoteModel])->Void)?
     var insightPaiHangList: [MoneyNoteModel] = []
     var insightPaiHangList_Total: [MoneyNoteModel] = []
     override init(frame: CGRect) {
@@ -135,7 +135,7 @@ extension MNkbsInsightPaiHangView {
 
 extension MNkbsInsightPaiHangView {
     @objc func moreBtnClick(sender: UIButton) {
-        moreBtnClickBlock?()
+        moreBtnClickBlock?(insightPaiHangList_Total)
     }
     
 }

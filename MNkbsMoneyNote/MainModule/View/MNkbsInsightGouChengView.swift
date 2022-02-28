@@ -10,7 +10,7 @@ import UIKit
 class MNkbsInsightGouChengView: UIView {
 
     var collection: UICollectionView!
-    var moreBtnClickBlock: (()->Void)?
+    var moreBtnClickBlock: (([MNkbsInsightItem])->Void)?
     var insightGouchengList: [MNkbsInsightItem] = []
     var insightGouchengList_Total: [MNkbsInsightItem] = []
     override init(frame: CGRect) {
@@ -118,7 +118,7 @@ extension MNkbsInsightGouChengView {
 
 extension MNkbsInsightGouChengView {
     @objc func moreBtnClick(sender: UIButton) {
-        moreBtnClickBlock?()
+        moreBtnClickBlock?(insightGouchengList_Total)
     }
     
 }

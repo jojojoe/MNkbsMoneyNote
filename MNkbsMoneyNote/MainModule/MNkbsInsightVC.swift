@@ -21,6 +21,10 @@ class MNkbsInsightVC: UIViewController {
     let yearMonthsInsightChart = MNkbsInsightMonthsChart()
     var currentYearMonth: String = "2021-06"
     var currentYear: String = "2021"
+    var isCurrentShowYearChart: Bool = false
+    
+    let calendarView = MNkbsYearMonthSelectView()
+    
     
     
     override func viewDidLoad() {
@@ -28,6 +32,7 @@ class MNkbsInsightVC: UIViewController {
         setupView()
         setupContentInsightView()
         updateData()
+        setupYearMonthSelectView()
     }
     
     func updateData() {
@@ -44,9 +49,11 @@ class MNkbsInsightVC: UIViewController {
         
         paihangView.fetchPaiHangData(beginTime: beginDate, endTime: endDate)
         
-        daysInsightChart.refreshData(yearMonthStr: currentYearMonth)
-        
-        yearMonthsInsightChart.refreshData(yearStr: currentYear)
+        if isCurrentShowYearChart {
+            daysInsightChart.refreshData(yearMonthStr: currentYearMonth)
+        } else {
+            yearMonthsInsightChart.refreshData(yearStr: currentYear)
+        }
     }
     
 
@@ -138,6 +145,16 @@ extension MNkbsInsightVC {
         
     }
     
+    func showMoreGouchengPreview(list: [MNkbsInsightItem]) {
+        let vc = MNkbsGouchengPreviewVC(gouchengList: list)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showMorePaihangPreview(list: [MoneyNoteModel]) {
+        let vc = MNkbsPaihangPreviewVC(paihangList: list)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func setupContentInsightView() {
         
         bgContentV.addSubview(gouchengView)
@@ -146,12 +163,26 @@ extension MNkbsInsightVC {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(250)
         }
+        gouchengView.moreBtnClickBlock = {
+            [weak self] lis in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.showMoreGouchengPreview(list: lis)
+            }
+        }
         //
         bgContentV.addSubview(paihangView)
         paihangView.snp.makeConstraints {
             $0.top.equalTo(gouchengView.snp.bottom).offset(24)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(390)
+        }
+        paihangView.moreBtnClickBlock = {
+            [weak self] lis in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.showMorePaihangPreview(list: lis)
+            }
         }
         //
         
@@ -166,7 +197,7 @@ extension MNkbsInsightVC {
         //
         bgContentV.addSubview(yearMonthsInsightChart)
         yearMonthsInsightChart.snp.makeConstraints {
-            $0.top.equalTo(daysInsightChart.snp.bottom).offset(24)
+            $0.top.equalTo(paihangView.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
             $0.left.equalTo(0)
             $0.height.equalTo(280)
@@ -175,6 +206,98 @@ extension MNkbsInsightVC {
         
         
     }
+    
+    func updateShowYearChartStatus(isShow: Bool) {
+        isCurrentShowYearChart = isShow
+        daysInsightChart.isHidden = isCurrentShowYearChart
+        yearMonthsInsightChart.isHidden = !isCurrentShowYearChart
+    }
+}
+
+extension MNkbsInsightVC {
+    
+    func setupYearMonthSelectView() {
+        
+        calendarView.alpha = 0
+        view.addSubview(calendarView)
+        calendarView.snp.makeConstraints {
+            $0.left.right.bottom.top.equalToSuperview()
+        }
+        
+    }
+
+    func showYearMonthSelectView() {
+        // show coin alert
+        UIView.animate(withDuration: 0.35) {
+            self.calendarView.alpha = 1
+        }
+        
+        calendarView.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            UIView.animate(withDuration: 0.25) {
+                self.calendarView.alpha = 0
+            } completion: { finished in
+                if finished {
+                     
+                }
+            }
+        }
+        
+        calendarView.selectClickBlock = {
+            [weak self] yearStrm, monthStrm in
+            guard let `self` = self else {return}
+            debugPrint("yearStr - \(yearStrm)")
+            debugPrint("monthStr - \(monthStrm ?? "")")
+            if let monthStrm_m = monthStrm {
+                self.currentYearMonth = self.yearMonthStr(year: yearStrm, monthIndexStr: monthStrm_m)
+                self.updateShowYearChartStatus(isShow: false)
+            } else {
+                self.currentYearMonth = yearStrm
+                self.updateShowYearChartStatus(isShow: false)
+            }
+            
+            self.currentYear = yearStrm
+            
+            DispatchQueue.main.async {
+                
+                self.updateData()
+            }
+            
+        }
+        
+    }
+    
+    func yearMonthStr(year: String, monthIndexStr: String) -> String {
+        var ymStr: String = "\(year)-01"
+        if monthIndexStr == "0" {
+            ymStr = "\(year)-01"
+        } else if monthIndexStr == "1" {
+            ymStr = "\(year)-02"
+        } else if monthIndexStr == "2" {
+            ymStr = "\(year)-03"
+        } else if monthIndexStr == "3" {
+            ymStr = "\(year)-04"
+        } else if monthIndexStr == "4" {
+            ymStr = "\(year)-05"
+        } else if monthIndexStr == "5" {
+            ymStr = "\(year)-06"
+        } else if monthIndexStr == "6" {
+            ymStr = "\(year)-07"
+        } else if monthIndexStr == "7" {
+            ymStr = "\(year)-08"
+        } else if monthIndexStr == "8" {
+            ymStr = "\(year)-09"
+        } else if monthIndexStr == "9" {
+            ymStr = "\(year)-10"
+        } else if monthIndexStr == "10" {
+            ymStr = "\(year)-11"
+        } else if monthIndexStr == "11" {
+            ymStr = "\(year)-12"
+        }
+        return ymStr
+    }
+    
 }
 
 extension MNkbsInsightVC {
@@ -188,6 +311,7 @@ extension MNkbsInsightVC {
     
     @objc func dateSelectBgViewClick(gesture: UITapGestureRecognizer) {
         //
+        showYearMonthSelectView()
         debugPrint("show time select")
     }
     

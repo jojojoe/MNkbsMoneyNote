@@ -25,6 +25,9 @@
 		EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */; };
 		EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */; };
 		EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */; };
+		EB6D80F127CC6355002F1308 /* MNkbsYearMonthSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D80F027CC6355002F1308 /* MNkbsYearMonthSelectView.swift */; };
+		EB6D80F327CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D80F227CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift */; };
+		EB6D80F527CCA533002F1308 /* MNkbsPaihangPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D80F427CCA533002F1308 /* MNkbsPaihangPreviewVC.swift */; };
 		EB7324F026218F0100EAFFB2 /* MNkbsInputNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */; };
 		EB75C4C226252CFF00F0C100 /* MNkbsConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */; };
 		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
@@ -66,6 +69,9 @@
 		EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsMainVC.swift; sourceTree = "<group>"; };
 		EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSettingVC.swift; sourceTree = "<group>"; };
 		EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsSubscriptionVC.swift; sourceTree = "<group>"; };
+		EB6D80F027CC6355002F1308 /* MNkbsYearMonthSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsYearMonthSelectView.swift; sourceTree = "<group>"; };
+		EB6D80F227CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsGouchengPreviewVC.swift; sourceTree = "<group>"; };
+		EB6D80F427CCA533002F1308 /* MNkbsPaihangPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsPaihangPreviewVC.swift; sourceTree = "<group>"; };
 		EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputNumberView.swift; sourceTree = "<group>"; };
 		EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsConfigManager.swift; sourceTree = "<group>"; };
 		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
@@ -147,13 +153,14 @@
 				EB33025A261D457900A715EE /* MNkbsInputPreview.swift */,
 				EB7324EF26218F0100EAFFB2 /* MNkbsInputNumberView.swift */,
 				EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */,
+				EB395D16269C77830071A60D /* MNkbsAddTagEditView.swift */,
 				D8BE986F2633DDA700C3ECD3 /* MNkbsTimeFilterView.swift */,
 				D8BE98722633DE8A00C3ECD3 /* MNkbsTagFilterView.swift */,
 				EBD234E4264FC4AD0018F41B /* MNkbsInsightGouChengView.swift */,
 				EBE866DC26688262008C37B5 /* MNkbsInsightPaiHangView.swift */,
 				EBE866DE266882A2008C37B5 /* MNkbsInsightDaysChart.swift */,
 				EBE866E0266882B0008C37B5 /* MNkbsInsightMonthsChart.swift */,
-				EB395D16269C77830071A60D /* MNkbsAddTagEditView.swift */,
+				EB6D80F027CC6355002F1308 /* MNkbsYearMonthSelectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -182,6 +189,8 @@
 				EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */,
 				EB25F7952643FE550039E1B9 /* MNkbsInsightVC.swift */,
 				EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */,
+				EB6D80F227CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift */,
+				EB6D80F427CCA533002F1308 /* MNkbsPaihangPreviewVC.swift */,
 				EB330259261D448700A715EE /* View */,
 			);
 			path = MainModule;
@@ -335,12 +344,14 @@
 				D8BE979025FF956200C3ECD3 /* ViewController.swift in Sources */,
 				EB33025B261D457900A715EE /* MNkbsInputPreview.swift in Sources */,
 				EB5D9B5226005E0300033246 /* MNkbsSubscriptionVC.swift in Sources */,
+				EB6D80F527CCA533002F1308 /* MNkbsPaihangPreviewVC.swift in Sources */,
 				EB5D9B4F26005DF600033246 /* MNkbsSettingVC.swift in Sources */,
 				EB5D9B4B26005DD700033246 /* MNkbsMainVC.swift in Sources */,
 				EB75C4C226252CFF00F0C100 /* MNkbsConfigManager.swift in Sources */,
 				EB395D19269C840E0071A60D /* TaskDelay.swift in Sources */,
 				EBE866E1266882B0008C37B5 /* MNkbsInsightMonthsChart.swift in Sources */,
 				EBAAB16D26B17B5A00D89E0C /* UIKit+Simply.swift in Sources */,
+				EB6D80F327CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift in Sources */,
 				EBAAB16F26B17C1A00D89E0C /* KbsPurchaseManager.swift in Sources */,
 				D8BE98732633DE8A00C3ECD3 /* MNkbsTagFilterView.swift in Sources */,
 				EBE866DD26688262008C37B5 /* MNkbsInsightPaiHangView.swift in Sources */,
@@ -349,6 +360,7 @@
 				EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */,
 				EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */,
 				EB000CAF2698603800A55C10 /* MNkbsTagEditVC.swift in Sources */,
+				EB6D80F127CC6355002F1308 /* MNkbsYearMonthSelectView.swift in Sources */,
 				D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
 				EBE866DF266882A2008C37B5 /* MNkbsInsightDaysChart.swift in Sources */,
