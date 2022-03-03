@@ -7,8 +7,8 @@
 
 import UIKit
 
-enum TimeFitlerType {
-    case week
+enum TimeFitlerType: Int {
+    case week = 0
     case month
     case year
     case all
@@ -176,36 +176,47 @@ extension MNkbsTimeFilterView {
 }
 
 extension MNkbsTimeFilterView {
+    
+    func showBtnSelectStatus(timeType: TimeFitlerType) {
+        weekBtn.isSelected = false
+        monthBtn.isSelected = false
+        yearBtn.isSelected = false
+        allBtn.isSelected = false
+        var currentB = weekBtn
+        switch timeType {
+        case .week:
+            currentB = weekBtn
+        case .month:
+            currentB = monthBtn
+        case .year:
+            currentB = yearBtn
+        case .all:
+            currentB = allBtn
+        case .custom:
+            currentB = weekBtn
+        }
+        currentB.isSelected = true
+        
+    }
+    
     @objc func backbtnClick(sender: UIButton) {
         showContentStatus(isShow: false)
         
     }
     @objc func weekbtnClick(sender: UIButton) {
-        weekBtn.isSelected = true
-        monthBtn.isSelected = false
-        yearBtn.isSelected = false
-        allBtn.isSelected = false
+        showBtnSelectStatus(timeType: .week)
         selectTimeFilterBlock?(.week)
     }
     @objc func monthbtnClick(sender: UIButton) {
-        monthBtn.isSelected = true
-        weekBtn.isSelected = false
-        yearBtn.isSelected = false
-        allBtn.isSelected = false
+        showBtnSelectStatus(timeType: .month)
         selectTimeFilterBlock?(.month)
     }
     @objc func yearbtnClick(sender: UIButton) {
-        yearBtn.isSelected = true
-        weekBtn.isSelected = false
-        monthBtn.isSelected = false
-        allBtn.isSelected = false
+        showBtnSelectStatus(timeType: .year)
         selectTimeFilterBlock?(.year)
     }
     @objc func allbtnClick(sender: UIButton) {
-        allBtn.isSelected = true
-        weekBtn.isSelected = false
-        yearBtn.isSelected = false
-        monthBtn.isSelected = false
+        showBtnSelectStatus(timeType: .all)
         selectTimeFilterBlock?(.all)
     }
 }

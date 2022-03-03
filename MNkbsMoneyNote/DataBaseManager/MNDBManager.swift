@@ -124,18 +124,20 @@ extension MNDBManager {
     /// 创建 MoneyTagRecordList TABLE
     fileprivate func createMoneyTagRecordListTable() {
         let table = Table("MoneyTagRecordList")
+        // 每一个记录项目里面的tag都单独记出来 用来通过tag查找
         // money note 记录的 systemDate
         let noteSystemDate = Expression<String>("systemDate")
         // tag name
         let tagName = Expression<String>("tagName")
         // recordDate
         let noteRecordDate = Expression<String>("recordDate")
-        
+        let indexCount = Expression<String>("indexCount")
         do {
             try db?.run(table.create { t in
                 t.column(noteSystemDate, primaryKey: true)
                 t.column(tagName)
                 t.column(noteRecordDate)
+                t.column(indexCount)
                 
             })
         } catch {
@@ -176,12 +178,14 @@ extension MNDBManager {
             let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyNoteList (systemDate, recordDate, priceStr, remarkStr, tagJsonStr) VALUES (?,?,?,?,?)")
             try insetSql?.run([model.systemDate, model.recordDate, model.priceStr, model.remarkStr, model.tagJsonStr])
             // delete taglist
-            deleteMoneyTagRecordList(systemDate: model.systemDate) {
+            deleteMoneyTagRecordList(recordDate: model.recordDate) {
                 [weak self] in
                 guard let `self` = self else {return}
                 // add money tag record
-                for tagModel in model.tagModelList {
-                    self.addMoneyTagRecord(systemDate: model.systemDate, tagName: tagModel.tagName, recordDate: model.recordDate) {
+                
+                for (ind, tagModel) in model.tagModelList.enumerated() {
+                    
+                    self.addMoneyTagRecord(systemDate: CLongLong(round(Date().unixTimestamp*1000)).string, tagName: tagModel.tagName, recordDate: model.recordDate, indexCount: ind.string) {
                         completionBlock?()
                     }
                 }
@@ -199,9 +203,10 @@ extension MNDBManager {
         
         do {
             try db?.run(deleteItem.delete())
-            deleteMoneyTagRecordList(systemDate: model.systemDate) {
+            deleteMoneyTagRecordList(recordDate: model.systemDate) {
                 completionBlock?()
             }
+             
         } catch {
             debugPrint("dberror: delete table failed :\(db_systemDate)")
         }
@@ -257,6 +262,11 @@ extension MNDBManager {
                     moneyNoteList.append(item)
                 }
             }
+            
+            moneyNoteList = moneyNoteList.sorted { A, B in
+                A.priceStr.double() ?? 0 > B.priceStr.double() ?? 0
+            }
+            
             completionBlock?(moneyNoteList)
             
         } catch {
@@ -270,10 +280,10 @@ extension MNDBManager {
 
 extension MNDBManager {
     // TagRecordList
-    func addMoneyTagRecord(systemDate: String, tagName: String, recordDate: String, completionBlock: (()->Void)?) {
+    func addMoneyTagRecord(systemDate: String, tagName: String, recordDate: String, indexCount: String, completionBlock: (()->Void)?) {
         do {
-            let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName, recordDate) VALUES (?,?,?)")
-            try insetSql?.run([systemDate, tagName, recordDate])
+            let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName, recordDate, indexCount) VALUES (?,?,?,?)")
+            try insetSql?.run([systemDate, tagName, recordDate, indexCount])
         } catch {
             
         }
@@ -281,15 +291,15 @@ extension MNDBManager {
     }
     
     // TagRecordList
-    func deleteMoneyTagRecordList(systemDate: String, completionBlock: (()->Void)?) {
+    func deleteMoneyTagRecordList(recordDate: String, completionBlock: (()->Void)?) {
         let table = Table("MoneyTagRecordList")
-        let db_systemDate = Expression<String>("systemDate")
-        let deleteItem = table.filter(db_systemDate == systemDate)
+        let db_recordDate = Expression<String>("recordDate")
+        let deleteItem = table.filter(db_recordDate == recordDate)
         
         do {
             try db?.run(deleteItem.delete())
         } catch {
-            debugPrint("dberror: delete table failed :\(db_systemDate)")
+            debugPrint("dberror: delete table failed :\(db_recordDate)")
         }
         
         completionBlock?()
@@ -314,16 +324,22 @@ extension MNDBManager {
                 let str = wherelist.joined(separator: " OR ")
                 whereStr = "WHERE \(str)"
                 whereStr = whereStr.appending(" AND recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' ORDER BY recordDate DESC")
+            } else {
+                // 当选择要查找的Tag为空数组时 会把默认的空标签也算上
+                whereStr = whereStr.appending("WHERE recordDate >= '\(beginTimeStr)' AND recordDate < '\(endTimeStr)' ORDER BY recordDate DESC")
             }
             
             if let results = try db?.prepare("select * from MoneyTagRecordList \(whereStr);") {
                 var sysDateList: [String] = []
                 for row in results {
-                    let sysDate_m = row[0] as? String ?? ""
-                    if !sysDateList.contains(sysDate_m) {
-                        sysDateList.append(sysDate_m)
+                    let recordsysDate_m = row[2] as? String ?? ""
+                    if !sysDateList.contains(recordsysDate_m) {
+                        sysDateList.append(recordsysDate_m)
                     }
                 }
+                
+                sysDateList = sysDateList.removeDuplicate()
+                
                 for date in sysDateList {
                     
                     if let results = try db?.prepare("select * from MoneyNoteList WHERE systemDate = \(date);") {
@@ -406,10 +422,14 @@ extension MNDBManager {
                     let tagName_m = row[0] as? String ?? ""
                     let bgColor_m = row[1] as? String ?? ""
                     let tagIndex_m = row[2] as? String ?? ""
-                    
-                    
                     let item = MNkbsTagItem(bgColor: bgColor_m, tagName: tagName_m, tagIndex: tagIndex_m)
                     tagList.append(item)
+                    
+                    
+//                    if tagName_m != "+--+" && bgColor_m != "1000000" {
+//                        
+//                    }
+                    
                 }
             }
             completionBlock?(tagList)

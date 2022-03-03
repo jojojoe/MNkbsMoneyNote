@@ -34,7 +34,9 @@ class MNkbsInputTagView: UIView {
     
     func loadData() {
         
-        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            
+        }
         MNDBManager.default.selectTagList { tagList in
             DispatchQueue.main.async {
                 [weak self] in
@@ -57,8 +59,22 @@ extension MNkbsInputTagView {
     }
     
     func udpateCurrentSelectTagList(tagList: [MNkbsTagItem]) {
-        currentSelectTagList = tagList
+        let tagModelList = tageRemoveDefault(list: tagList)
+        currentSelectTagList = tagModelList
         collection.reloadData()
+    }
+    
+    func tageRemoveDefault(list: [MNkbsTagItem]) -> [MNkbsTagItem] {
+        var tagModelList: [MNkbsTagItem] = []
+        let defultItem = MNkbsTagItem()
+        tagModelList.append(contentsOf: list)
+        tagModelList.removeAll { tagItem in
+            if tagItem.bgColor == defultItem.bgColor && tagItem.tagName == defultItem.tagName {
+                return true
+            }
+            return false
+        }
+        return tagModelList
     }
 }
 

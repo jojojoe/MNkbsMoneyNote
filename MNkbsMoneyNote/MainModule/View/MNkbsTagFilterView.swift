@@ -24,6 +24,8 @@ class MNkbsTagFilterView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        showClearBtnStatus()
+        addNotiAction()
     }
     
     required init?(coder: NSCoder) {
@@ -32,6 +34,27 @@ class MNkbsTagFilterView: UIView {
 }
 
 extension MNkbsTagFilterView {
+    @objc func updateTagChangeStatus(object: Any?) {
+        DispatchQueue.main.async {
+            self.tagView.loadData()
+        }
+    }
+}
+
+extension MNkbsTagFilterView {
+    func addNotiAction() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTagChangeStatus(object: )), name: NSNotification.Name(rawValue: "noti_tagChange"), object: nil)
+
+        
+    }
+    @objc func showClearBtnStatus() {
+        if tagView.currentSelectTagList.count == 0 {
+            clearSelectBtn.isHidden = true
+        } else {
+            clearSelectBtn.isHidden = false
+        }
+    }
+    
     func showContentStatus(isShow: Bool) {
         var offset: CGFloat = 0
         if isShow {
@@ -130,6 +153,7 @@ extension MNkbsTagFilterView {
             [weak self] selectTagList in
             guard let `self` = self else {return}
             self.selectTagFilterBlock?(selectTagList)
+            self.showClearBtnStatus()
         }
         contentBgView.addSubview(tagView)
         tagView.snp.makeConstraints {

@@ -15,10 +15,10 @@ class MNkbsInsightVC: UIViewController {
     let dateSelectBgView = UIView()
     let dateLabel = UILabel()
     let totalMoneyLabel = UILabel()
-    let gouchengView = MNkbsInsightGouChengView()
-    let paihangView = MNkbsInsightPaiHangView()
-    let daysInsightChart = MNkbsInsightDaysChart()
-    let yearMonthsInsightChart = MNkbsInsightMonthsChart()
+    var gouchengView: MNkbsInsightGouChengView! // = MNkbsInsightGouChengView()
+    var paihangView: MNkbsInsightPaiHangView! //= MNkbsInsightPaiHangView()
+    var daysInsightChart: MNkbsInsightDaysChart! // = MNkbsInsightDaysChart()
+    var yearMonthsInsightChart: MNkbsInsightMonthsChart! // = MNkbsInsightMonthsChart()
     var currentYearMonth: String = "2021-06"
     var currentYear: String = "2021"
     var isCurrentShowYearChart: Bool = false
@@ -29,10 +29,32 @@ class MNkbsInsightVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupContentInsightView()
-        updateData()
-        setupYearMonthSelectView()
+        view.backgroundColor = UIColor(hexString: "#202020")
+        self.setupDefaultData()
+        self.setupView()
+//        self.setupContentInsightView()
+//        self.setupYearMonthSelectView()
+//        self.updateShowYearChartStatus(isShow: false)
+//        
+//        self.updateData()
+         
+//        DispatchQueue.global().async {
+//            [weak self] in
+//            guard let `self` = self else {return}
+//            self.updateData()
+//        }
+        
+        
+    }
+    
+    func setupDefaultData() {
+        let date = Date.today()
+        let yearDateStr = date.string(withFormat: "yyyy")
+        let monthDateStr = date.string(withFormat: "yyyy-MM")
+        currentYear = yearDateStr
+        currentYearMonth = monthDateStr
+        isCurrentShowYearChart = false
+        
     }
     
     func updateData() {
@@ -50,9 +72,16 @@ class MNkbsInsightVC: UIViewController {
         paihangView.fetchPaiHangData(beginTime: beginDate, endTime: endDate)
         
         if isCurrentShowYearChart {
-            daysInsightChart.refreshData(yearMonthStr: currentYearMonth)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                self.yearMonthsInsightChart.refreshData(yearStr: self.currentYear)
+            }
+
         } else {
-            yearMonthsInsightChart.refreshData(yearStr: currentYear)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                self.daysInsightChart.refreshData(yearMonthStr: self.currentYearMonth)
+            }
+            
+
         }
     }
     
@@ -100,7 +129,7 @@ extension MNkbsInsightVC {
         bgContentV.snp.makeConstraints {
             $0.top.left.right.bottom.equalToSuperview()
             $0.width.equalTo(view.safeAreaLayoutGuide.snp.width)
-            $0.height.equalTo(1400)
+            $0.height.equalTo(1000)
         }
         //
         
@@ -118,7 +147,7 @@ extension MNkbsInsightVC {
         
         //
         
-        dateLabel.text = "2021年1月"
+        dateLabel.text = "\(currentYearMonth)"
         dateLabel.adjustsFontSizeToFitWidth = true
         dateLabel.font = UIFont(name: "ArialRoundedMTBold", size: 16)
         dateLabel.textAlignment = .center
@@ -132,7 +161,7 @@ extension MNkbsInsightVC {
         //
         totalMoneyLabel.font = UIFont(name: "ArialRoundedMTBold", size: 24 )
         totalMoneyLabel.textColor = .white
-        totalMoneyLabel.text = "$1000"
+        totalMoneyLabel.text = ""
         bgContentV.addSubview(totalMoneyLabel)
         totalMoneyLabel.snp.makeConstraints {
             $0.centerY.equalTo(dateSelectBgView)
@@ -141,8 +170,6 @@ extension MNkbsInsightVC {
             $0.width.greaterThanOrEqualTo(1)
         }
         //
-        
-        
     }
     
     func showMoreGouchengPreview(list: [MNkbsInsightItem]) {
@@ -156,12 +183,12 @@ extension MNkbsInsightVC {
     }
     
     func setupContentInsightView() {
-        
+        gouchengView = MNkbsInsightGouChengView()
         bgContentV.addSubview(gouchengView)
         gouchengView.snp.makeConstraints {
             $0.top.equalTo(totalMoneyLabel.snp.bottom).offset(20)
             $0.left.right.equalToSuperview()
-            $0.height.equalTo(250)
+            $0.height.equalTo(260)
         }
         gouchengView.moreBtnClickBlock = {
             [weak self] lis in
@@ -171,11 +198,12 @@ extension MNkbsInsightVC {
             }
         }
         //
+        paihangView = MNkbsInsightPaiHangView()
         bgContentV.addSubview(paihangView)
         paihangView.snp.makeConstraints {
             $0.top.equalTo(gouchengView.snp.bottom).offset(24)
             $0.left.right.equalToSuperview()
-            $0.height.equalTo(390)
+            $0.height.equalTo(310)
         }
         paihangView.moreBtnClickBlock = {
             [weak self] lis in
@@ -185,7 +213,7 @@ extension MNkbsInsightVC {
             }
         }
         //
-        
+        daysInsightChart = MNkbsInsightDaysChart()
         bgContentV.addSubview(daysInsightChart)
         daysInsightChart.snp.makeConstraints {
             $0.top.equalTo(paihangView.snp.bottom).offset(24)
@@ -195,6 +223,7 @@ extension MNkbsInsightVC {
         }
         
         //
+        yearMonthsInsightChart = MNkbsInsightMonthsChart()
         bgContentV.addSubview(yearMonthsInsightChart)
         yearMonthsInsightChart.snp.makeConstraints {
             $0.top.equalTo(paihangView.snp.bottom).offset(24)
@@ -202,9 +231,6 @@ extension MNkbsInsightVC {
             $0.left.equalTo(0)
             $0.height.equalTo(280)
         }
-        
-        
-        
     }
     
     func updateShowYearChartStatus(isShow: Bool) {

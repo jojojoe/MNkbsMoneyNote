@@ -23,14 +23,17 @@ class MNkbsInsightDaysChart: UIView {
     }
     
     func refreshData(yearMonthStr: String) {
-        MNkbsInsightManager.default.fetchInsightDaysMoney(dateMonthString: yearMonthStr) { monthDayItems in
-            DispatchQueue.main.async {
-                [weak self] in
-                guard let `self` = self else {return}
-                self.monthDayItems = monthDayItems
-                self.refreshChartWithChartConfiguration()
+        DispatchQueue.global().async {
+            MNkbsInsightManager.default.fetchInsightDaysMoney(dateMonthString: yearMonthStr) { monthDayItems in
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.monthDayItems = monthDayItems
+                    self.refreshChartWithChartConfiguration()
+                }
             }
         }
+        
         
     }
 
@@ -98,6 +101,15 @@ extension MNkbsInsightDaysChart {
             aaOptions.touchEventEnabled = true
             aaChartView.aa_refreshChartWholeContentWithChartOptions(aaOptions)
         }
+        
+        //
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM"
+        let nowMonthString = formatter.string(from: Date())
+        formatter.dateFormat = "dd"
+        let nowDayString = formatter.string(from: Date())
+//        aaChartView.aa_showTheSeriesElementContentWithSeriesElementIndex(nowDayString.int ?? 0)
+//        aaChartView.aa_updateXAxisExtremes(min: 100, max: 200)
     }
     
     
@@ -122,12 +134,12 @@ extension MNkbsInsightDaysChart {
             .colorsTheme([gradientColorDic])
             .scrollablePlotArea(AAScrollablePlotArea()
                 .minWidth(1000)
-                .scrollPositionX(1))
+                .scrollPositionX(0))
             .series(configureY_SeriesDataArray())
             .tooltipEnabled(false)
             .categories(xList)
             .legendEnabled(false)
-        
+            
         return aaChartModel
     }
     

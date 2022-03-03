@@ -49,28 +49,31 @@ extension MNkbsInsightPaiHangView {
     }
     
     func fetchPaiHangData(beginTime: Date, endTime: Date) {
+        DispatchQueue.global().async {
+            MNkbsInsightManager.default.fetchPaiHang(beginTime: beginTime, endTime: endTime) { noteList in
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    let item = noteList.prefix(4)
+                    self.insightPaiHangList = Array(item)
+                    self.insightPaiHangList_Total = noteList
+                    self.collection.reloadData()
+                }
+            }
+        }
+         
+         
+         
+          
+        
         /*
-         
-         MNkbsInsightManager.default.fetchPaiHang(beginTime: beginTime, endTime: endTime) { noteList in
-             DispatchQueue.main.async {
-                 [weak self] in
-                 guard let `self` = self else {return}
-                 let item = insightPaiHangList.prefix(5)
-                 self.insightPaiHangList = Array(item)
-                 self.insightPaiHangList_Total = noteList
-                 self.collection.reloadData()
-             }
-         }
-         
-         */
-        
-        
         let testList = testMoneyNoteList()
         
         let item = testList.prefix(5)
         self.insightPaiHangList = Array(item)
         self.insightPaiHangList_Total = testList
         self.collection.reloadData()
+         */
     }
     
     

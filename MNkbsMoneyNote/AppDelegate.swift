@@ -19,8 +19,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mainVC: MNkbsNoteListVC = MNkbsNoteListVC()
 //    var mainVC: MNkbsInsightVC = MNkbsInsightVC()
     
+    func setupDefaultTag() {
+        // cn
+        
+        var hasAddBuildTag = UserDefaults.standard.bool(forKey: "hasAddBuildTag")
+        if hasAddBuildTag == true {
+            return
+        }
+        hasAddBuildTag = true
+//        let localeId = NSLocale.current.identifier
+        
+        debugPrint("localeId = \(isChZhong())") // en_US en_CN
+        // 添加内置标签
+        MNDBManager.default.addMoneyTag(tagName: "衣服", tagColor: "008800", tagIndex: "1") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "吃饭", tagColor: "000088", tagIndex: "2") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "旅游", tagColor: "880000", tagIndex: "3") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "油费", tagColor: "808000", tagIndex: "4") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "日用品", tagColor: "800080", tagIndex: "5") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "出差", tagColor: "8F0010", tagIndex: "6") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "看电影", tagColor: "8F0F18", tagIndex: "7") {
+            
+        }
+        MNDBManager.default.addMoneyTag(tagName: "话费", tagColor: "1F8F18", tagIndex: "8") {
+            
+        }
+        // en
+        
+        
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
+        
+        
+        
         var beginTimeDate = Date.today().previous(.monday, considerToday: true)
         var endTimeDate = Date.today()
 //
@@ -42,8 +86,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("yearFirst = \(yearFirst)")
         debugPrint("yearLast = \(yearLast)")
         
-        // prepare db
-        MNDBManager.default.prepareDB()
         
         // test db
         // inset
@@ -59,9 +101,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let model = MoneyNoteModel(sysDate: timestamp, recorDate: timestamp, price: "13.3", remark: "eat meet", tagJson: tagListd.toString, tagModel: tagList)
         // insert
-        MNDBManager.default.addMoneyNoteItem(model: model) {
-            debugPrint("add complete")
-        }
+//        MNDBManager.default.addMoneyNoteItem(model: model) {
+//            debugPrint("add complete")
+//        }
         
         // load
 //        MNDBManager.default.selectAllMoneyNoteItem { (list) in
@@ -99,6 +141,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            debugPrint("taglist = \(tagList)")
 //        }
         
+        // prepare db
+        MNDBManager.default.prepareDB()
+        setupDefaultTag()
         initMainVC()
         setupIAP()
         registerNotifications(application)
@@ -109,9 +154,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //
 //        }
         
-        MNkbsInsightManager.default.fetchInsightMonthsMoney(dateYearString: "2021") { list in
-            
-        }
+//        MNkbsInsightManager.default.fetchInsightMonthsMoney(dateYearString: "2021") { list in
+//            
+//        }
         
 //        MNkbsInsightManager.default.fetchGouCheng(beginTime: Date.init(timeIntervalSince1970: 0), endTime: Date()) { insightGouchengList in
 //            debugPrint("insightGouchengList = \(insightGouchengList)")
@@ -153,7 +198,7 @@ extension AppDelegate {
         for fy in UIFont.familyNames {
             let fts = UIFont.fontNames(forFamilyName: fy)
             for ft in fts {
-//                debugPrint("***fontName = \(ft)")
+                debugPrint("***fontName = \(ft)")
             }
         }
         #endif

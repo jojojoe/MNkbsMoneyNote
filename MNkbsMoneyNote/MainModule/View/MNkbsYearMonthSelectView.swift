@@ -85,9 +85,43 @@ extension MNkbsYearMonthSelectView: UICollectionViewDataSource {
         let bundle = recordsList[indexPath.section]
         let months = bundle["month"] as? [String] ?? []
         let month = months[indexPath.item]
-        cell.contentLab.text(month)
+        
+        let mS = monthDisplayName(monthIndexStr: month)
+        cell.contentLab.text(mS)
         
         return cell
+    }
+    
+    func monthDisplayName(monthIndexStr: String) -> String {
+        var monthS: String = ""
+        let isC = isChZhong()
+        
+        if monthIndexStr == "0" {
+            monthS = isC ? "一月" : "Jan."
+        } else if monthIndexStr == "1" {
+            monthS = isC ? "二月" : "Feb."
+        } else if monthIndexStr == "2" {
+            monthS = isC ? "三月" : "Mar."
+        } else if monthIndexStr == "3" {
+            monthS = isC ? "四月" : "Apr."
+        } else if monthIndexStr == "4" {
+            monthS = isC ? "五月" : "May."
+        } else if monthIndexStr == "5" {
+            monthS = isC ? "六月" : "Jun."
+        } else if monthIndexStr == "6" {
+            monthS = isC ? "七月" : "Jul."
+        } else if monthIndexStr == "7" {
+            monthS = isC ? "八月" : "Aug."
+        } else if monthIndexStr == "8" {
+            monthS = isC ? "九月" : "Sept."
+        } else if monthIndexStr == "9" {
+            monthS = isC ? "十月" : "Oct."
+        } else if monthIndexStr == "10" {
+            monthS = isC ? "十一月" : "Nov."
+        } else if monthIndexStr == "11" {
+            monthS = isC ? "十二月" : "Dec."
+        }
+        return monthS
     }
     
     

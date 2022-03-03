@@ -45,12 +45,28 @@ extension MNkbsInputPreview {
         
     }
     
+    func tageRemoveDefault(list: [MNkbsTagItem]) -> [MNkbsTagItem] {
+        var tagModelList: [MNkbsTagItem] = []
+        let defultItem = MNkbsTagItem()
+        tagModelList.append(contentsOf: list)
+        tagModelList.removeAll { tagItem in
+            if tagItem.bgColor == defultItem.bgColor && tagItem.tagName == defultItem.tagName {
+                return true
+            }
+            return false
+        }
+        return tagModelList
+    }
+    
     func fetchContentWith(noteItem: MoneyNoteModel, isEnableEditing: Bool = true) {
         
         let numbers = MNkbsNumberManager.default.processStringToNumType(valueStr: noteItem.priceStr)
         self.updateNumber(numberItems: numbers)
         //
-        tagsList = noteItem.tagModelList
+        // 不显示默认tag
+        let tagModelList = tageRemoveDefault(list: noteItem.tagModelList)
+         
+        tagsList = tagModelList
         collection.reloadData()
         //
         remarkTextView.text = noteItem.remarkStr
@@ -67,9 +83,11 @@ extension MNkbsInputPreview {
         if isEnableEditing {
             remarkTextView.isUserInteractionEnabled = true
             datePicker.isUserInteractionEnabled = true
+            collection.isUserInteractionEnabled = true
         } else {
             remarkTextView.isUserInteractionEnabled = false
             datePicker.isUserInteractionEnabled = false
+            collection.isUserInteractionEnabled = false
         }
                 
         
@@ -78,7 +96,8 @@ extension MNkbsInputPreview {
 
 extension MNkbsInputPreview {
     func updateTagCollection(tags: [MNkbsTagItem]) {
-        tagsList = tags
+        let tagModelList = tageRemoveDefault(list: tags)
+        tagsList = tagModelList
         collection.reloadData()
         if tags.count >= 1 {
             collection.scrollToItem(at: IndexPath(item: tags.count - 1, section: 0), at: .right, animated: true)
@@ -372,7 +391,7 @@ extension MNkbsInputPreview: UICollectionViewDataSource {
         let item = tagsList[indexPath.item]
         cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
         cell.tagNameLabel.text = item.tagName
-        cell.layer.cornerRadius = 6
+        cell.contentImgV.layer.cornerRadius = 6
         cell.layer.masksToBounds = false
         if isShowTagDeleteBtn {
             cell.deleteBtn.isHidden = false
@@ -481,12 +500,13 @@ class MNkbsInputPreviewTagCell: UICollectionViewCell {
         tagNameLabel.minimumScaleFactor = 0.8
         tagNameLabel.textAlignment = .center
         tagNameLabel.textColor = UIColor.white
+        
         tagNameLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(tagNameLabel)
         tagNameLabel.snp.makeConstraints {
             $0.bottom.equalTo(0)
-            $0.left.equalTo(28)
-            $0.right.equalTo(-6)
+            $0.left.equalTo(10)
+            $0.right.equalTo(-10)
             $0.top.equalTo(0)
         }
         //

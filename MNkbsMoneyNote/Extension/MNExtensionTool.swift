@@ -141,6 +141,18 @@ extension Date {
     }
 }
 
+public extension Array where Element: Equatable {
+   
+   /// 去除数组重复元素
+   /// - Returns: 去除数组重复元素后的数组
+   func removeDuplicate() -> Array {
+      return self.enumerated().filter { (index,value) -> Bool in
+           return self.firstIndex(of: value) == index
+       }.map { (_, value) in
+           value
+       }
+   }
+}
 
 extension Date {
     //本月开始日期

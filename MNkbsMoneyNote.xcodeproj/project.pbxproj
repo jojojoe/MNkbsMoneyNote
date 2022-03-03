@@ -183,9 +183,9 @@
 			isa = PBXGroup;
 			children = (
 				EB5D9B4A26005DD700033246 /* MNkbsMainVC.swift */,
+				EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */,
 				EB5D9B4E26005DF600033246 /* MNkbsSettingVC.swift */,
 				EB5D9B5126005E0300033246 /* MNkbsSubscriptionVC.swift */,
-				EBD115A1262D578F00C07D5E /* MNkbsNoteListVC.swift */,
 				EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */,
 				EB25F7952643FE550039E1B9 /* MNkbsInsightVC.swift */,
 				EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */,

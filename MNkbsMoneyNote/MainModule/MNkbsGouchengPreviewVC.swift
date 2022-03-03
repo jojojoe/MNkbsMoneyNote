@@ -22,7 +22,7 @@ class MNkbsGouchengPreviewVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor(.white)
+        view.backgroundColor = UIColor(hexString: "#202020")
         setupView()
     }
     
@@ -49,8 +49,9 @@ extension MNkbsGouchengPreviewVC {
         let topTitleLabel = UILabel()
         topTitleLabel.adhere(toSuperview: view)
             .text("构成")
-            .color(UIColor.black)
             .fontName(16, "AvenirNext-DemiBold")
+            .color(UIColor.white)
+            
         topTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalTo(backBtn.snp.centerY)

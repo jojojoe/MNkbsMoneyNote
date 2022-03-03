@@ -24,15 +24,17 @@ class MNkbsInsightMonthsChart: UIView {
     
     func refreshData(yearStr: String) {
          
-        
-        MNkbsInsightManager.default.fetchInsightMonthsMoney(dateYearString: yearStr) { yearMonthItems in
-            DispatchQueue.main.async {
-                [weak self] in
-                guard let `self` = self else {return}
-                self.yearMonthItems = yearMonthItems
-                self.refreshChartWithChartConfiguration()
+        DispatchQueue.global().async {
+            MNkbsInsightManager.default.fetchInsightMonthsMoney(dateYearString: yearStr) { yearMonthItems in
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.yearMonthItems = yearMonthItems
+                    self.refreshChartWithChartConfiguration()
+                }
             }
         }
+        
         
         
     }

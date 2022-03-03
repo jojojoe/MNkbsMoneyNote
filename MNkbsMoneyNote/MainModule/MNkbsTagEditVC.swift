@@ -18,7 +18,8 @@ class MNkbsTagEditVC: UIViewController {
     var contentTextFeid = UITextField()
     var toolView = UIView()
     var hideButton = UIButton()
-
+    var refreshTagStatusActionBlock: (()->Void)?
+    
     
     var dragingTagItem: MNkbsTagItem?
     
@@ -32,6 +33,10 @@ class MNkbsTagEditVC: UIViewController {
         setupDropAlert()
     }
     
+    func pushTagChangeNoti() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "noti_tagChange"), object: nil)
+    }
+    
     func loadData() {
         
         MNDBManager.default.selectTagList(completionBlock: { [weak self] itemList in
@@ -42,9 +47,10 @@ class MNkbsTagEditVC: UIViewController {
                 
                 self.tagList = itemList
                 
+                /*
                 // test
                 self.tagList = MNkbsTagManager.default.testtagList()
-                
+                */
                 self.collection.reloadData()
             }
         })
@@ -53,6 +59,7 @@ class MNkbsTagEditVC: UIViewController {
     
     func refreshData() {
         loadData()
+        refreshTagStatusActionBlock?()
     }
     
     func setupView() {
@@ -183,12 +190,14 @@ class MNkbsTagEditVC: UIViewController {
             if tag_m == "" {
                 return
             }
-            
-            MNDBManager.default.addMoneyTag(tagName: tag, tagColor: tagAddEditView.currentBgColorStr, tagIndex: "0") {
+            let tagItem = tagList[tagList.count - 1]
+            let tagIndex: Int = tagItem.tagIndex.int ?? 999 + 1
+            MNDBManager.default.addMoneyTag(tagName: tag, tagColor: tagAddEditView.currentBgColorStr, tagIndex: tagIndex.string) {
                 DispatchQueue.main.async {
                     [weak self] in
                     guard let `self` = self else {return}
                     self.refreshData()
+                    self.pushTagChangeNoti()
                 }
             }
         }
@@ -220,11 +229,11 @@ class MNkbsTagEditVC: UIViewController {
                 
             }
         }
-        Notice.Center.default.post(name: Notice.Names.mn_noti_TagRefresh, with: nil)
+//        Notice.Center.default.post(name: Notice.Names.mn_noti_TagRefresh, with: nil)
     }
     
     func addNewTagItemClick() {
-        
+        contentTextFeid.text = ""
         view.addSubview(toolView)
         contentTextFeid.becomeFirstResponder()
         
@@ -263,6 +272,7 @@ extension MNkbsTagEditVC {
                     MNDBManager.default.deleteMoneyTag(tagName: tag.tagName) {
                         DispatchQueue.main.async {
                             self.refreshData()
+                            self.pushTagChangeNoti()
                         }
                     }
                 }

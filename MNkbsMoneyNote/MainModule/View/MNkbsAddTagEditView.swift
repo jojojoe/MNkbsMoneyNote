@@ -173,6 +173,7 @@ extension MNkbsAddTagEditView {
     
     func selectBgColor(indexPath: IndexPath) {
         let colorStr = MNkbsBgColorManager.default.colorList[indexPath.item]
+        currentBgColorStr = colorStr
         bgColorView.backgroundColor = UIColor(hexString: colorStr)
     }
     

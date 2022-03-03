@@ -22,7 +22,7 @@ class MNkbsMainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#171717")
-        setupCodeUI()
+//        setupCodeUI()
     }
     
 
@@ -30,6 +30,7 @@ class MNkbsMainVC: UIViewController {
 
 }
 
+/*
 extension MNkbsMainVC {
     func setupCodeUI() {
 
@@ -207,3 +208,4 @@ extension MNkbsMainVC {
     }
 }
 
+*/

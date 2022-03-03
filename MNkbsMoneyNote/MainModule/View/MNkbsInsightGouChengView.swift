@@ -27,22 +27,25 @@ class MNkbsInsightGouChengView: UIView {
 
 extension MNkbsInsightGouChengView {
     func fetchGouChengData(beginTime: Date, endTime: Date) {
-        /*
          
-         MNkbsInsightManager.default.fetchGouCheng(beginTime: beginTime, endTime: endTime) { insightGouchengList in
-             debugPrint("insightGouchengList = \(insightGouchengList)")
-             DispatchQueue.main.async {
-                 [weak self] in
-                 guard let `self` = self else {return}
-                 let item = insightGouchengList.prefix(5)
-                 self.insightGouchengList = Array(item)
-                 self.insightGouchengList_Total = insightGouchengList
-                 self.collection.reloadData()
-             }
-         }
+        DispatchQueue.global().async {
+            MNkbsInsightManager.default.fetchGouCheng(beginTime: beginTime, endTime: endTime) { insightGouchengList in
+                debugPrint("insightGouchengList = \(insightGouchengList)")
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    let item = insightGouchengList.prefix(5)
+                    self.insightGouchengList = Array(item)
+                    self.insightGouchengList_Total = insightGouchengList
+                    self.collection.reloadData()
+                }
+            }
+        }
          
-         */
+         
+          
         
+        /*
         let test1 = MNkbsInsightItem(tagName: "Tag1", percentLine: 0.8, priceDouble: 111)
         let test2 = MNkbsInsightItem(tagName: "Tag2", percentLine: 0.6, priceDouble: 222)
         let test3 = MNkbsInsightItem(tagName: "Tag3", percentLine: 0.5, priceDouble: 333)
@@ -54,6 +57,7 @@ extension MNkbsInsightGouChengView {
         self.insightGouchengList = testList
         self.insightGouchengList_Total = testList
         self.collection.reloadData()
+         */
     }
     
     

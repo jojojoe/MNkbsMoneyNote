@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ZKProgressHUD
 
 class MNkbsNoteListVC: UIViewController {
     let settingBtn = UIButton(type: .custom)
@@ -21,29 +22,67 @@ class MNkbsNoteListVC: UIViewController {
     let tagFilterIconV = UIImageView(image: UIImage(named: ""))
     let moneyLabel = UILabel()
     var collection: UICollectionView!
-    
+    let nothingAlertBgV = UIView()
     var noteList: [MoneyNoteModel] = []
     //
     let timeFilterView = MNkbsTimeFilterView()
     let tagFilterView = MNkbsTagFilterView()
-    var currentTimeType: TimeFitlerType = .month
+    var currentTimeType: TimeFitlerType = .week
     var currentTagsNameList: [String] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(hexString: "#202020")
         view.clipsToBounds = true
+        setupDefaultConfig()
         setupView()
         setupCollection()
         setupTimeFilterView()
         setupTagFilterView()
-        loadNoteListData()
+        fetchCurrentNoteItemList()
+        setupNothingAlertV()
+        
+        
+        
     }
     
-
+    
      
 
+}
+
+extension MNkbsNoteListVC {
+    func setupDefaultConfig() {
+        loadTimerFilterUserDefaults()
+    }
+    
+    func loadTimerFilterUserDefaults() {
+        let typeInt = UserDefaults.standard.integer(forKey: "timeFilterType")
+        currentTimeType = TimeFitlerType(rawValue: typeInt) ?? .week
+        
+    }
+    func updateTimerFitlerType(type: TimeFitlerType) {
+        UserDefaults.standard.set(type.rawValue, forKey: "timeFilterType")
+        updateTopTimeFilterLabel()
+    }
+    
+    func updateTopTimeFilterLabel() {
+        var timeFitlerName = "Week"
+        switch currentTimeType {
+        case .week:
+            timeFitlerName = "Week"
+        case .month:
+            timeFitlerName = "Month"
+        case .year:
+            timeFitlerName = "Year"
+        case .all:
+            timeFitlerName = "All"
+        default:
+            timeFitlerName = "All"
+        }
+        timeFilterLabel.text(timeFitlerName)
+    }
 }
 
 extension MNkbsNoteListVC {
@@ -198,15 +237,15 @@ extension MNkbsNoteListVC {
         addNewRecordBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-24)
-            $0.width.height.equalTo(60)
+            $0.height.equalTo(60)
+            $0.left.equalToSuperview().offset(30)
         }
         addNewRecordBtn.addTarget(self, action: #selector(addNewRecordBtnClick(sender: )), for: .touchUpInside)
     }
     
-    
-    
     func setupTimeFilterView() {
         view.addSubview(timeFilterView)
+        timeFilterView.showBtnSelectStatus(timeType: currentTimeType)
         timeFilterView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
@@ -218,6 +257,7 @@ extension MNkbsNoteListVC {
             guard let `self` = self else {return}
             debugPrint(timeFilterType)
             self.filterTimeNoteList(timetype: timeFilterType)
+            self.updateTimerFitlerType(type: timeFilterType)
         }
         timeFilterView.backBtnBlock = {
             DispatchQueue.main.async {
@@ -246,11 +286,7 @@ extension MNkbsNoteListVC {
             [weak self] tagList in
             guard let `self` = self else {return}
             debugPrint(tagList)
-            if tagList.count == 0 {
-                self.loadNoteListData()
-            } else {
-                self.filterTagNoteList(tagList: tagList)
-            }
+            self.filterTagNoteList(tagList: tagList)
             
         }
         tagFilterView.backBtnBlock = {
@@ -268,6 +304,54 @@ extension MNkbsNoteListVC {
         
     }
     
+    func setupNothingAlertV() {
+        nothingAlertBgV.isHidden = true
+        nothingAlertBgV.adhere(toSuperview: view)
+            .isUserInteractionEnabled(true)
+            .backgroundColor(UIColor.white.withAlphaComponent(0.3))
+        nothingAlertBgV.snp.makeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalTo(topEditBar.snp.top)
+        }
+        let nothingTap = UITapGestureRecognizer()
+        nothingTap.addTarget(self, action: #selector(nothingTapClick(sender: )))
+        nothingAlertBgV.addGestureRecognizer(nothingTap)
+        //
+        let nothingIconIV = UIImageView()
+        nothingIconIV.adhere(toSuperview: nothingAlertBgV)
+            .image("")
+            .backgroundColor(UIColor.lightGray)
+        nothingIconIV.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(-80)
+            $0.width.height.equalTo(100)
+        }
+        
+        //
+        let notingLabel = UILabel()
+        notingLabel.adhere(toSuperview: nothingAlertBgV)
+            .text("Please Record")
+            .textAlignment(.center)
+            .numberOfLines(2)
+            .fontName(18, "GillSans")
+            .color(.black)
+        notingLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.left.equalToSuperview().offset(50)
+            $0.height.greaterThanOrEqualTo(40)
+        }
+        
+        
+    }
+    
+    func updateNothingAlertStatus() {
+        if noteList.count >= 1 {
+            nothingAlertBgV.isHidden = true
+        } else {
+            nothingAlertBgV.isHidden = false
+        }
+    }
+    
 }
 
 extension MNkbsNoteListVC {
@@ -277,8 +361,13 @@ extension MNkbsNoteListVC {
     
     @objc func insightBtnClick(sender: UIButton) {
         debugPrint("show 统计view")
-        let vc = MNkbsInsightVC()
-        self.navigationController?.pushViewController(vc, animated: true)
+        if noteList.count >= 1 {
+            let vc = MNkbsInsightVC()
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            ZKProgressHUD.showMessage("First record", maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1, completion: nil)
+        }
+        
     }
     @objc func timeFilterTapGesClick(gesture: UIGestureRecognizer) {
         if tagFilterView.isShowStatus == true {
@@ -295,31 +384,37 @@ extension MNkbsNoteListVC {
     @objc func addNewRecordBtnClick(sender: UIButton) {
         showNoteEditVC(item: nil)
     }
+    
+    @objc func nothingTapClick(sender: UIButton) {
+        showNoteEditVC(item: nil)
+    }
 }
 
 extension MNkbsNoteListVC {
-    func loadNoteListData() {
-//        MNDBManager.default.selectAllMoneyNoteItem {
-//            [weak self] noteList in
-//            guard let `self` = self else {return}
-//            DispatchQueue.main.async {
-//                self.noteList = noteList
-//                self.collection.reloadData()
-//                updateTotalPrice()
-//            }
-//        }
-        
-        //
-        let item1 = defauModelItem()
-        let item2 = defauModelItem()
-        let item3 = defauModelItem()
-        let item4 = defauModelItem()
-        let item5 = defauModelItem()
-        let item6 = defauModelItem()
-        self.noteList = [item1, item2, item3, item4, item5, item6]
-        self.collection.reloadData()
-        updateTotalPrice()
-    }
+//    func loadNoteListData() {
+////        MNDBManager.default.selectAllMoneyNoteItem {
+////            [weak self] noteList in
+////            guard let `self` = self else {return}
+////            DispatchQueue.main.async {
+////                self.noteList = noteList
+////                self.collection.reloadData()
+////                self.updateTotalPrice()
+////                self.updateNothingAlertStatus()
+////            }
+////        }
+//
+//        //
+////        let item1 = defauModelItem()
+////        let item2 = defauModelItem()
+////        let item3 = defauModelItem()
+////        let item4 = defauModelItem()
+////        let item5 = defauModelItem()
+////        let item6 = defauModelItem()
+////        self.noteList = [item1, item2, item3, item4, item5, item6]
+//
+//
+//
+//    }
     
     func updateTotalPrice() {
         var value: Double = 0
@@ -339,7 +434,6 @@ extension MNkbsNoteListVC {
         //
         
         self.moneyLabel.text = MNkbsSettingManager.default.currentCurrencySymbol().rawValue + valueStr
-        
         
     }
     
@@ -363,6 +457,11 @@ extension MNkbsNoteListVC {
     
     func showNoteEditVC(item: MoneyNoteModel?) {
         let reeditVC = MNkbsReeditVC(noteItem: item)
+        reeditVC.okAddBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.fetchCurrentNoteItemList()
+        }
         self.present(reeditVC, animated: true, completion: nil)
         
     }
@@ -385,6 +484,7 @@ extension MNkbsNoteListVC {
     }
     
     func fetchCurrentNoteItemList() {
+        
         MNDBManager.default.filterNote(tagNameList: currentTagsNameList, timeType: currentTimeType) {
             [weak self] noteList in
             guard let `self` = self else {return}
@@ -392,6 +492,7 @@ extension MNkbsNoteListVC {
                 self.noteList = noteList
                 self.collection.reloadData()
                 self.updateTotalPrice()
+                self.updateNothingAlertStatus()
             }
         }
     }

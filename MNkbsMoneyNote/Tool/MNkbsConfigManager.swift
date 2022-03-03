@@ -165,9 +165,10 @@ class MNkbsNumberManager {
  
 
 struct MNkbsTagItem: Codable {
-    var bgColor: String = ""
-    var tagName: String = ""
-    var tagIndex: String = ""
+    var bgColor: String = "#100000"
+    var tagName: String = "+--+"
+    var tagIndex: String = "999"
+     
     
     func toDict() -> [String: String] {
         let dict: [String: String] = ["bgColor": bgColor, "tagName": tagName, "tagIndex": tagIndex]
@@ -233,7 +234,7 @@ extension Notice.Names {
  
 extension Notice.Names {
     
-    static let mn_noti_TagRefresh = Notice.Name<Any?>(name: "mn_noti_TagRefresh")
+//    static let mn_noti_TagRefresh = Notice.Name<Any?>(name: "mn_noti_TagRefresh")
     
     
     

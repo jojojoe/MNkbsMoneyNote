@@ -16,7 +16,7 @@ class MNkbsReeditVC: UIViewController {
     let inputPreview = MNkbsInputPreview()
     let tagView = MNkbsInputTagView()
     let numberBar = MNkbsInputNumberBar()
-    
+    var okAddBlock: (()->Void)?
     let currentNoteItem: MoneyNoteModel?
     
     init(noteItem: MoneyNoteModel?) {
@@ -39,11 +39,23 @@ class MNkbsReeditVC: UIViewController {
         
         // last
         setupCurrentNoteItemContent()
+        addNotiAction()
     }
     
+    func addNotiAction() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTagChangeStatus(object: )), name: NSNotification.Name(rawValue: "noti_tagChange"), object: nil)
+        
+    }
+    @objc func updateTagChangeStatus(object: Any?) {
+        DispatchQueue.main.async {
+            self.tagView.loadData()
+        }
+    }
 
-     
+}
 
+extension MNkbsReeditVC {
+   
 }
 
 extension MNkbsReeditVC {
@@ -86,8 +98,6 @@ extension MNkbsReeditVC {
         }
         backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         //
-        
-        
         
     }
     
@@ -157,7 +167,9 @@ extension MNkbsReeditVC {
 
 extension MNkbsReeditVC {
     func showTagEditVC() {
-        self.present(MNkbsTagEditVC(), animated: true, completion: nil)
+        let tagEditVC = MNkbsTagEditVC()
+         
+        self.present(tagEditVC, animated: true, completion: nil)
     }
 }
 
@@ -172,6 +184,8 @@ extension MNkbsReeditVC {
         if item.numberType == .number_done {
             saveCurrentRecordToDB()
             backBtnClick(sender: backBtn)
+            
+            okAddBlock?()
         } else {
             self.inputPreview.inputNumber(item: item)
         }
@@ -192,11 +206,21 @@ extension MNkbsReeditVC {
         let systemDateStr: String = self.currentNoteItem?.systemDate ?? CLongLong(round(Date().unixTimestamp*1000)).string
         var tagJsonString: String = ""
         var tagList: [[String:String]] = []
-        
-        for tagItem in self.inputPreview.tagsList {
-            let dict = tagItem.toDict()
+        var tagItemList_m: [MNkbsTagItem] = self.inputPreview.tagsList
+        if self.inputPreview.tagsList.count == 0 {
+            // 设置空标签
+            let kongItem = MNkbsTagItem()
+            let dict = kongItem.toDict()
             tagList.append(dict)
+            tagItemList_m = [kongItem]
+        } else {
+            for tagItem in self.inputPreview.tagsList {
+                let dict = tagItem.toDict()
+                tagList.append(dict)
+            }
         }
+        
+        
         tagJsonString = tagList.toString // array转string
         /*
          tagJsonString = JSON.init(parseJSON: tagJsonString).description // array通过 JSON 转string
@@ -211,7 +235,7 @@ extension MNkbsReeditVC {
 
          }
          */
-        let model = MoneyNoteModel(sysDate: systemDateStr, recorDate: recordDateStr, price: priceStr, remark: remark, tagJson: tagJsonString, tagModel: self.inputPreview.tagsList)
+        let model = MoneyNoteModel(sysDate: systemDateStr, recorDate: recordDateStr, price: priceStr, remark: remark, tagJson: tagJsonString, tagModel: tagItemList_m)
         MNDBManager.default.addMoneyNoteItem(model: model) {
             DispatchQueue.main.async {
                 [weak self] in
