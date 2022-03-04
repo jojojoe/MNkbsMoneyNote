@@ -131,8 +131,13 @@ extension MNkbsInsightGouChengView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: MNkbsInsightGouChengViewCell.self, for: indexPath)
         let item = insightGouchengList[indexPath.item]
-        cell.tagNameLabel.text = item.tagName
         
+//        if item.tagName == "+--+" {
+//            cell.tagNameLabel.text = "无标签"
+//        } else {
+//            cell.tagNameLabel.text = item.tagName
+//        }
+        cell.tagNameLabel.text = item.tagName
         let symbol = MNkbsSettingManager.default.currentCurrencySymbol()
         cell.priceLabel.text = "\(symbol.rawValue)\(item.priceDouble)"
         

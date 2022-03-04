@@ -32,6 +32,7 @@
 		EB75C4C226252CFF00F0C100 /* MNkbsConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */; };
 		EB75C52D2625900A00F0C100 /* MNkbsInputTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */; };
 		EB75C5302625D68300F0C100 /* JsonConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75C52F2625D68200F0C100 /* JsonConvert.swift */; };
+		EB97A49627D1B89800295DBB /* MNkbsGouchengInfoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97A49527D1B89800295DBB /* MNkbsGouchengInfoListVC.swift */; };
 		EB97F2CA263599C60052952D /* MNkbsReeditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */; };
 		EBAAB16D26B17B5A00D89E0C /* UIKit+Simply.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAAB16C26B17B5A00D89E0C /* UIKit+Simply.swift */; };
 		EBAAB16F26B17C1A00D89E0C /* KbsPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAAB16E26B17C1A00D89E0C /* KbsPurchaseManager.swift */; };
@@ -76,6 +77,7 @@
 		EB75C4C126252CFF00F0C100 /* MNkbsConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsConfigManager.swift; sourceTree = "<group>"; };
 		EB75C52C2625900A00F0C100 /* MNkbsInputTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsInputTagView.swift; sourceTree = "<group>"; };
 		EB75C52F2625D68200F0C100 /* JsonConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConvert.swift; sourceTree = "<group>"; };
+		EB97A49527D1B89800295DBB /* MNkbsGouchengInfoListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsGouchengInfoListVC.swift; sourceTree = "<group>"; };
 		EB97F2C9263599C60052952D /* MNkbsReeditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNkbsReeditVC.swift; sourceTree = "<group>"; };
 		EBAAB16C26B17B5A00D89E0C /* UIKit+Simply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Simply.swift"; sourceTree = "<group>"; };
 		EBAAB16E26B17C1A00D89E0C /* KbsPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KbsPurchaseManager.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				EB000CAE2698603800A55C10 /* MNkbsTagEditVC.swift */,
 				EB6D80F227CCA51C002F1308 /* MNkbsGouchengPreviewVC.swift */,
 				EB6D80F427CCA533002F1308 /* MNkbsPaihangPreviewVC.swift */,
+				EB97A49527D1B89800295DBB /* MNkbsGouchengInfoListVC.swift */,
 				EB330259261D448700A715EE /* View */,
 			);
 			path = MainModule;
@@ -363,6 +366,7 @@
 				EB6D80F127CC6355002F1308 /* MNkbsYearMonthSelectView.swift in Sources */,
 				D8BE97F8262A7DA300C3ECD3 /* MNDBManager.swift in Sources */,
 				D8BE978C25FF956200C3ECD3 /* AppDelegate.swift in Sources */,
+				EB97A49627D1B89800295DBB /* MNkbsGouchengInfoListVC.swift in Sources */,
 				EBE866DF266882A2008C37B5 /* MNkbsInsightDaysChart.swift in Sources */,
 				EBD234E5264FC4AD0018F41B /* MNkbsInsightGouChengView.swift in Sources */,
 				EB25F7962643FE550039E1B9 /* MNkbsInsightVC.swift in Sources */,

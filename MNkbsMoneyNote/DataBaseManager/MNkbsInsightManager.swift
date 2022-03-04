@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 struct MNkbsInsightItem {
     var tagName: String = ""
     var percentLine: Double = 0.5
@@ -50,96 +51,103 @@ func isChZhong() -> Bool {
     }
 }
 
+func loadFirstInstallDate() -> Date {
+    let kFirstInstall = "kFirstInstall"
+    if let firstDate = UserDefaults.standard.value(forKey: kFirstInstall) as? Date {
+        return firstDate
+    } else {
+        let firstDate = Date()
+        UserDefaults.standard.setValue(firstDate, forKey: kFirstInstall)
+        return firstDate
+    }
+}
+
 class MNkbsInsightManager: NSObject {
     static let `default` = MNkbsInsightManager()
     
     let localeId = NSLocale.current.identifier
     
-    var currentGouChengList: [MNkbsInsightItem] = []
-    var currentPaiHangList: [MoneyNoteModel] = []
-    var firstInstallDate: Date = Date()
+//    var currentGouChengList: [MNkbsInsightItem] = []
+//    var currentPaiHangList: [MoneyNoteModel] = []
     
     
     
-    func loadFirstInstallDate() {
-        let kFirstInstall = "kFirstInstall"
-        if let firstDate = UserDefaults.standard.value(forKey: kFirstInstall) as? Date {
-            firstInstallDate = firstDate
-        } else {
-            let firstDate = Date()
-            firstInstallDate = firstDate
-            UserDefaults.standard.setValue(firstDate, forKey: kFirstInstall)
-        }
-    }
     
-    func loadAllRecordYearsMonths() -> [[String : Any]] {
-        var firstDateStr = firstInstallDate.string(withFormat: "yyyy-MM-dd")
-        let nowDate = Date()
-        var currentDateStr = nowDate.string(withFormat: "yyyy-MM-dd")
-        let firstInstallYear = firstInstallDate.string(withFormat: "yyyy")
-        let currentYear = nowDate.string(withFormat: "yyyy")
+    
+    
+    func loadAllRecordYearsMonths(completion: @escaping (([[String : Any]])->Void)) {
+        //
         
-        
-        let firstDateList = firstDateStr.components(separatedBy: "-")
-        let currentDateList = currentDateStr.components(separatedBy: "-")
-        
-        let firstYear = firstDateList.first ?? "1000"
-        let firstMonth = firstDateList[safe: 1] ?? "1"
-        let currentDateYear = currentDateList.first ?? "1001"
-        let currentDateMonth = currentDateList[safe: 1] ?? "1"
-        
-        let firstMonthInt = (firstMonth.int ?? 1) - 1
-        let currentMonthInt = (currentDateMonth.int ?? 1) - 1
-        
-        var dateList: [[String:Any]] = []
-        
-        
-        if currentYear == firstInstallYear {
-            var firstMonths: [String] = []
-            for i in firstMonthInt...currentMonthInt {
-                firstMonths.append(i.string)
-            }
-            let firstDict: [String : Any] = ["year":firstYear, "month" : firstMonths]
-            dateList.append(firstDict)
-            return dateList
-        } else {
+        MNDBManager.default.selectAllMoneyNoteItemMinMaxDate { minDate, maxDate in
+            let firstDateStr = minDate.string(withFormat: "yyyy-MM-dd")
+            let lastDateStr = maxDate.string(withFormat: "yyyy-MM-dd")
+            let firstYear = minDate.string(withFormat: "yyyy")
+            let lastYear = maxDate.string(withFormat: "yyyy")
+            let firstMonth = minDate.string(withFormat: "MM")
+            let lastMonth = maxDate.string(withFormat: "MM")
             
-            // 添加首次
-            var firstMonths: [String] = []
-            for i in firstMonthInt...11 {
-                firstMonths.append(i.string)
-            }
-            let firstDict: [String : Any] = ["year":firstYear, "month" : firstMonths]
-            dateList.append(firstDict)
+//            let firstDateList = firstDateStr.components(separatedBy: "-")
+//            let lastDateList = lastDateStr.components(separatedBy: "-")
+            
+//            let firstYear = firstDateList.first ?? "1000"
+//            let firstMonth = firstDateList[safe: 1] ?? "1"
+//            let lastDateYear = lastDateList.first ?? "1001"
+//            let lastDateMonth = lastDateList[safe: 1] ?? "1"
+            
+            let firstMonthInt = (firstMonth.int ?? 1) - 1
+            let lastMonthInt = (lastMonth.int ?? 1) - 1
+            
+            var dateList: [[String:Any]] = []
             
             
-            // 添加中间月份
-            let firstYearInt = firstYear.int ?? 1000
-            let currentYearInt = currentDateYear.int ?? 1001
-            let offset = (currentYearInt - firstYearInt)
-            if offset > 1 {
-                for i in 1..<offset {
-                    let year = firstYearInt + i
-                    let yearStr = year.string
-                    var months: [String] = []
-                    months = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]
-                    let dict: [String : Any] = ["year": yearStr, "month" : months]
-    //                dateList.append(dict)
-                    dateList.insert(dict, at: 0)
+            if lastYear == firstYear {
+                var firstMonths: [String] = []
+                for i in firstMonthInt...lastMonthInt {
+                    firstMonths.append(i.string)
                 }
+                let firstDict: [String : Any] = ["year":firstYear, "month" : firstMonths]
+                dateList.append(firstDict)
+//                return dateList
+                completion(dateList)
+            } else {
+                
+                // 添加首次
+                var firstMonths: [String] = []
+                for i in firstMonthInt...11 {
+                    firstMonths.append(i.string)
+                }
+                let firstDict: [String : Any] = ["year":firstYear, "month" : firstMonths]
+                dateList.append(firstDict)
+                
+                
+                // 添加中间月份
+                let firstYearInt = firstYear.int ?? 1000
+                let lastYearInt = lastYear.int ?? 1001
+                let offset = (lastYearInt - firstYearInt)
+                if offset > 1 {
+                    for i in 1..<offset {
+                        let year = firstYearInt + i
+                        let yearStr = year.string
+                        var months: [String] = []
+                        months = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]
+                        let dict: [String : Any] = ["year": yearStr, "month" : months]
+        //                dateList.append(dict)
+                        dateList.insert(dict, at: 0)
+                    }
+                }
+                // 添加最后
+                var lastMonths: [String] = []
+                for i in 0...lastMonthInt {
+                    lastMonths.append(i.string)
+                }
+                let lastDict: [String : Any] = ["year":lastYear, "month" : lastMonths]
+        //        dateList.append(lastDict)
+                dateList.insert(lastDict, at: 0)
+                debugPrint("dateList: \(dateList)")
+//                return dateList
+                completion(dateList)
             }
-            // 添加最后
-            var lastMonths: [String] = []
-            for i in 0...currentMonthInt {
-                lastMonths.append(i.string)
-            }
-            let lastDict: [String : Any] = ["year":currentDateYear, "month" : lastMonths]
-    //        dateList.append(lastDict)
-            dateList.insert(lastDict, at: 0)
-            debugPrint("dateList: \(dateList)")
-            return dateList
         }
-        
         
         //test
 //        firstDateStr = "2000-02-02"
@@ -215,8 +223,20 @@ class MNkbsInsightManager: NSObject {
             insightItems_m = insightItems_m.sorted { iA, iB in
                 iA.priceDouble > iB.priceDouble
             }
-            self.currentGouChengList = insightItems_m
+//            self.currentGouChengList = insightItems_m
             completion(insightItems_m)
+        }
+        
+    }
+    
+    func fetchGouChengPaihangInfoNote(tagName: String, beginTime: Date, endTime: Date, completion: @escaping (([MoneyNoteModel])->Void)) {
+        MNDBManager.default.selectNoteRecordTags(tagNames: [tagName], beginTime: beginTime, endTime: endTime) { insightPaihangList in
+            var tagListM: [MoneyNoteModel] = []
+            tagListM.append(contentsOf: insightPaihangList)
+            tagListM = tagListM.sorted { itemA, itemB in
+                return itemA.priceStr.double() ?? 0 >= itemB.priceStr.double() ?? 0
+            }
+            completion(tagListM)
         }
         
     }
@@ -224,8 +244,16 @@ class MNkbsInsightManager: NSObject {
     func fetchPaiHang(beginTime: Date, endTime: Date, completion: @escaping (([MoneyNoteModel])->Void)) {
         MNDBManager.default.selectMoneyNoteItem(beginTime: beginTime, endTime: endTime, "priceStr") { insightPaihangList in
             debugPrint("insightPaihangList = \(insightPaihangList)")
-            self.currentPaiHangList = insightPaihangList
-            completion(insightPaihangList)
+//            self.currentPaiHangList = insightPaihangList
+            
+            // 价格的字符串排序不正确 所以需要重新按照double类型排一下顺序
+            var tagListM: [MoneyNoteModel] = []
+            tagListM.append(contentsOf: insightPaihangList)
+            tagListM = tagListM.sorted { itemA, itemB in
+                return itemA.priceStr.double() ?? 0 >= itemB.priceStr.double() ?? 0
+            }
+            
+            completion(tagListM)
         }
     }
     
@@ -237,7 +265,7 @@ class MNkbsInsightManager: NSObject {
         if !dateMonthString.contains("-") {
             // 某年全年
             let beginDate = formatter.date(from: "\(dateMonthString)-01-01-00-00-00") ?? Date()
-            let endDate = formatter.date(from: "\(dateMonthString)-12-23-59-59") ?? Date()
+            let endDate = formatter.date(from: "\(dateMonthString)-12-31-23-59-59") ?? Date()
             return(beginDate, endDate, 0)
         } else {
             // 某年某月

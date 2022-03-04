@@ -19,9 +19,11 @@ class MNkbsInsightVC: UIViewController {
     var paihangView: MNkbsInsightPaiHangView! //= MNkbsInsightPaiHangView()
     var daysInsightChart: MNkbsInsightDaysChart! // = MNkbsInsightDaysChart()
     var yearMonthsInsightChart: MNkbsInsightMonthsChart! // = MNkbsInsightMonthsChart()
-    var currentYearMonth: String = "2021-06"
+    var currentYearMonth: String = "2021-06" // "2022" : "2021-06"
     var currentYear: String = "2021"
-    var isCurrentShowYearChart: Bool = false
+    var isCurrentShowYearChart: Bool = true
+//    var currentSelectYear: String = ""
+//    var currentSelectMonth: String = ""
     
     let calendarView = MNkbsYearMonthSelectView()
     
@@ -32,28 +34,32 @@ class MNkbsInsightVC: UIViewController {
         view.backgroundColor = UIColor(hexString: "#202020")
         self.setupDefaultData()
         self.setupView()
-//        self.setupContentInsightView()
-//        self.setupYearMonthSelectView()
-//        self.updateShowYearChartStatus(isShow: false)
-//        
-//        self.updateData()
+        HUD.show()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            HUD.hide()
+            self.setupContentInsightView()
+            self.setupYearMonthSelectView()
+            self.updateShowYearChartStatus(isShow: true)
+            self.updateData()
+        }
+        
          
-//        DispatchQueue.global().async {
-//            [weak self] in
-//            guard let `self` = self else {return}
-//            self.updateData()
-//        }
         
         
     }
     
     func setupDefaultData() {
+        
         let date = Date.today()
         let yearDateStr = date.string(withFormat: "yyyy")
         let monthDateStr = date.string(withFormat: "yyyy-MM")
         currentYear = yearDateStr
-        currentYearMonth = monthDateStr
-        isCurrentShowYearChart = false
+        // 默认显示这一年
+        currentYearMonth = yearDateStr //monthDateStr
+//        currentSelectYear = yearDateStr
+//        currentSelectMonth = ""
+        calendarView.currentYearStr = yearDateStr
+        calendarView.currentMonthStr = ""
         
     }
     
@@ -70,18 +76,11 @@ class MNkbsInsightVC: UIViewController {
         gouchengView.fetchGouChengData(beginTime: beginDate, endTime: endDate)
         
         paihangView.fetchPaiHangData(beginTime: beginDate, endTime: endDate)
-        
+        dateLabel.text = "\(currentYearMonth)"
         if isCurrentShowYearChart {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                self.yearMonthsInsightChart.refreshData(yearStr: self.currentYear)
-            }
-
+            self.yearMonthsInsightChart.refreshData(yearStr: self.currentYear)
         } else {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                self.daysInsightChart.refreshData(yearMonthStr: self.currentYearMonth)
-            }
-            
-
+            self.daysInsightChart.refreshData(yearMonthStr: self.currentYearMonth)
         }
     }
     
@@ -173,7 +172,9 @@ extension MNkbsInsightVC {
     }
     
     func showMoreGouchengPreview(list: [MNkbsInsightItem]) {
-        let vc = MNkbsGouchengPreviewVC(gouchengList: list)
+        let (beginDate, endDate, numberOfDaysInMonth) = MNkbsInsightManager.default.processBeginDateAndEndDate(dateMonthString: currentYearMonth)
+        
+        let vc = MNkbsGouchengPreviewVC(gouchengList: list, beginTime: beginDate, endTime: endDate)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -275,12 +276,13 @@ extension MNkbsInsightVC {
             guard let `self` = self else {return}
             debugPrint("yearStr - \(yearStrm)")
             debugPrint("monthStr - \(monthStrm ?? "")")
+            
             if let monthStrm_m = monthStrm {
                 self.currentYearMonth = self.yearMonthStr(year: yearStrm, monthIndexStr: monthStrm_m)
                 self.updateShowYearChartStatus(isShow: false)
             } else {
                 self.currentYearMonth = yearStrm
-                self.updateShowYearChartStatus(isShow: false)
+                self.updateShowYearChartStatus(isShow: true)
             }
             
             self.currentYear = yearStrm

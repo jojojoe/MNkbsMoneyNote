@@ -113,6 +113,7 @@ extension MNkbsReeditVC {
             guard let `self` = self else {return}
             self.tagView.udpateCurrentSelectTagList(tagList: tagList)
         }
+        inputPreview.isShowKongTag = false
         inputPreview.isShowTagDeleteBtn = true
         view.addSubview(inputPreview)
         inputPreview.snp.makeConstraints {
@@ -182,10 +183,15 @@ extension MNkbsReeditVC {
 extension MNkbsReeditVC {
     func inputNumber(item: MNkbsNumberItem) {
         if item.numberType == .number_done {
-            saveCurrentRecordToDB()
-            backBtnClick(sender: backBtn)
             
-            okAddBlock?()
+            if self.inputPreview.datePicker.date.timeIntervalSince(Date()) >= 1 {
+                HUD.error("输入的时间大于当前时间，请重新输入")
+            } else {
+                saveCurrentRecordToDB()
+                backBtnClick(sender: backBtn)
+                okAddBlock?()
+            }
+
         } else {
             self.inputPreview.inputNumber(item: item)
         }
@@ -206,18 +212,32 @@ extension MNkbsReeditVC {
         let systemDateStr: String = self.currentNoteItem?.systemDate ?? CLongLong(round(Date().unixTimestamp*1000)).string
         var tagJsonString: String = ""
         var tagList: [[String:String]] = []
-        var tagItemList_m: [MNkbsTagItem] = self.inputPreview.tagsList
+//        var tagItemList_m: [MNkbsTagItem] = self.inputPreview.tagsList
+        var tagListT: [MNkbsTagItem] = []
         if self.inputPreview.tagsList.count == 0 {
             // 设置空标签
             let kongItem = MNkbsTagItem()
             let dict = kongItem.toDict()
             tagList.append(dict)
-            tagItemList_m = [kongItem]
+            tagListT = [kongItem]
         } else {
-            for tagItem in self.inputPreview.tagsList {
+            
+            if self.inputPreview.tagsList.count == 1 {
+                tagListT.append(contentsOf: self.inputPreview.tagsList)
+            } else if self.inputPreview.tagsList.count >= 2 {
+                for iTag in self.inputPreview.tagsList {
+                    if iTag.tagName == "+--+" && iTag.bgColor == "#100000" {
+                        
+                    } else {
+                        tagListT.append(iTag)
+                    }
+                }
+            }
+            for tagItem in tagListT {
                 let dict = tagItem.toDict()
                 tagList.append(dict)
             }
+            
         }
         
         
@@ -235,7 +255,7 @@ extension MNkbsReeditVC {
 
          }
          */
-        let model = MoneyNoteModel(sysDate: systemDateStr, recorDate: recordDateStr, price: priceStr, remark: remark, tagJson: tagJsonString, tagModel: tagItemList_m)
+        let model = MoneyNoteModel(sysDate: systemDateStr, recorDate: recordDateStr, price: priceStr, remark: remark, tagJson: tagJsonString, tagModel: tagListT)
         MNDBManager.default.addMoneyNoteItem(model: model) {
             DispatchQueue.main.async {
                 [weak self] in

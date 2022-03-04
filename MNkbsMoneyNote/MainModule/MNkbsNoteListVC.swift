@@ -60,6 +60,7 @@ extension MNkbsNoteListVC {
     func loadTimerFilterUserDefaults() {
         let typeInt = UserDefaults.standard.integer(forKey: "timeFilterType")
         currentTimeType = TimeFitlerType(rawValue: typeInt) ?? .week
+        updateTopTimeFilterLabel()
         
     }
     func updateTimerFitlerType(type: TimeFitlerType) {
@@ -139,7 +140,7 @@ extension MNkbsNoteListVC {
             $0.width.equalTo(100)
         }
         //
-        timeFilterLabel.text = "最近一周"
+        
         timeFilterLabel.font = UIFont(name: "AvenirNext-Regular", size: 16)
         timeFilterLabel.textColor = UIColor.black
         timeFilterLabel.textAlignment = .center
@@ -298,10 +299,8 @@ extension MNkbsNoteListVC {
                 } else {
                     self.tagFilterIconV.backgroundColor = UIColor.black
                 }
-                
             }
         }
-        
     }
     
     func setupNothingAlertV() {
@@ -344,12 +343,8 @@ extension MNkbsNoteListVC {
         
     }
     
-    func updateNothingAlertStatus() {
-        if noteList.count >= 1 {
-            nothingAlertBgV.isHidden = true
-        } else {
-            nothingAlertBgV.isHidden = false
-        }
+    func updateNothingAlertShowStatus(isShow: Bool) {
+        nothingAlertBgV.isHidden = !isShow
     }
     
 }
@@ -492,9 +487,18 @@ extension MNkbsNoteListVC {
                 self.noteList = noteList
                 self.collection.reloadData()
                 self.updateTotalPrice()
-                self.updateNothingAlertStatus()
+                
             }
         }
+        MNDBManager.default.selectAllMoneyNoteItem { list in
+            if list.count == 0 {
+                self.updateNothingAlertShowStatus(isShow: true)
+            } else {
+                self.updateNothingAlertShowStatus(isShow: false)
+            }
+        }
+        
+        
     }
 }
 
@@ -533,7 +537,7 @@ extension MNkbsNoteListVC: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

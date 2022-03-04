@@ -1,20 +1,22 @@
 //
-//  MNkbsGouchengPreviewVC.swift
+//  MNkbsGouchengInfoListVC.swift
 //  MNkbsMoneyNote
 //
-//  Created by JOJO on 2022/2/28.
+//  Created by JOJO on 2022/3/4.
 //
 
 import UIKit
 
-class MNkbsGouchengPreviewVC: UIViewController {
-
-    var collection: UICollectionView!
-    var gouchengList: [MNkbsInsightItem]
+class MNkbsGouchengInfoListVC: UIViewController {
+    var gouchengItem: MNkbsInsightItem
     var beginTime: Date
     var endTime: Date
-    init(gouchengList: [MNkbsInsightItem], beginTime: Date, endTime: Date) {
-        self.gouchengList = gouchengList
+    var collection: UICollectionView!
+    
+    var gouchengPaihangList: [MoneyNoteModel] = []
+    
+    init(gouchengItem: MNkbsInsightItem, beginTime: Date, endTime: Date) {
+        self.gouchengItem = gouchengItem
         self.beginTime = beginTime
         self.endTime = endTime
         super.init(nibName: nil, bundle: nil)
@@ -27,12 +29,27 @@ class MNkbsGouchengPreviewVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#202020")
+        loadData()
         setupView()
     }
+
     
+
 }
 
-extension MNkbsGouchengPreviewVC {
+extension MNkbsGouchengInfoListVC {
+    
+    func loadData() {
+        MNkbsInsightManager.default.fetchGouChengPaihangInfoNote(tagName: gouchengItem.tagName, beginTime: beginTime, endTime: endTime) {[weak self] noteList in
+            guard let `self` = self else {return}
+            
+            DispatchQueue.main.async {
+                self.gouchengPaihangList = noteList
+                self.collection.reloadData()
+            }
+        }
+    }
+    
     func setupView() {
         let backBtn = UIButton()
         backBtn.adhere(toSuperview: view)
@@ -47,12 +64,38 @@ extension MNkbsGouchengPreviewVC {
         //
         let topTitleLabel = UILabel()
         topTitleLabel.adhere(toSuperview: view)
-            .text("构成")
+            .text(gouchengItem.tagName)
             .fontName(16, "AvenirNext-DemiBold")
             .color(UIColor.white)
             
         topTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
+            $0.centerY.equalTo(backBtn.snp.centerY)
+            $0.width.height.greaterThanOrEqualTo(1)
+        }
+        //
+        let symbol = MNkbsSettingManager.default.currentCurrencySymbol()
+        
+        
+        var priceStr = "\(gouchengItem.priceDouble)"
+        if priceStr.contains(".") {
+            let strings = priceStr.components(separatedBy: ".")
+            let lastStr = strings.last
+            if let lastStrInt = lastStr?.int, lastStrInt > 0 {
+                //带有小数
+            } else {
+                priceStr = strings.first ?? priceStr
+            }
+        }
+        let priceSymbolStr: String = "\(symbol.rawValue)\(priceStr)"
+        //
+        let topPriceLabel = UILabel()
+        topPriceLabel.adhere(toSuperview: view)
+            .text(priceSymbolStr)
+            .fontName(16, "AvenirNext-DemiBold")
+            .color(UIColor.white)
+        topPriceLabel.snp.makeConstraints {
+            $0.right.equalToSuperview().offset(-12)
             $0.centerY.equalTo(backBtn.snp.centerY)
             $0.width.height.greaterThanOrEqualTo(1)
         }
@@ -73,16 +116,15 @@ extension MNkbsGouchengPreviewVC {
             $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview()
         }
-        collection.register(cellWithClass: MNkbsInsightGouChengViewCell.self)
+        collection.register(cellWithClass: MNkbsInsightPaiHangViewCell.self)
         
         
     }
-    
-    
-    
+ 
 }
 
-extension MNkbsGouchengPreviewVC {
+
+extension MNkbsGouchengInfoListVC {
     
     @objc func backBtnClick(sender: UIButton) {
         if self.navigationController != nil {
@@ -95,21 +137,20 @@ extension MNkbsGouchengPreviewVC {
 }
 
 
-extension MNkbsGouchengPreviewVC: UICollectionViewDataSource {
+extension MNkbsGouchengInfoListVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withClass: MNkbsInsightGouChengViewCell.self, for: indexPath)
-        let item = gouchengList[indexPath.item]
-//        if item.tagName == "+--+" {
-//            cell.tagNameLabel.text = "无标签"
-//        } else {
-//            cell.tagNameLabel.text = item.tagName
-//        }
-        cell.tagNameLabel.text = item.tagName
+        let cell = collectionView.dequeueReusableCell(withClass: MNkbsInsightPaiHangViewCell.self, for: indexPath)
+        let item = gouchengPaihangList[indexPath.item]
         
+        let dateString = MNkbsInsightManager.default.processMoneyNoteItemRecordTimeToString(noteItemRecordDate: item.recordDate)
+        cell.recordTimeLabel.text = dateString
+        //
+        cell.updateTagsList(tagList: item.tagModelList)
+        //
         let symbol = MNkbsSettingManager.default.currentCurrencySymbol()
-        cell.priceLabel.text = "\(symbol.rawValue)\(item.priceDouble)"
+        cell.priceLabel.text = "\(symbol.rawValue)\(item.priceStr)"
         
-        var priceStr = "\(item.priceDouble)"
+        var priceStr = "\(item.priceStr)"
         if priceStr.contains(".") {
             let strings = priceStr.components(separatedBy: ".")
             let lastStr = strings.last
@@ -121,22 +162,12 @@ extension MNkbsGouchengPreviewVC: UICollectionViewDataSource {
             cell.priceLabel.text = "\(symbol.rawValue)\(priceStr)"
         }
         
-        
-        let percentWidth: CGFloat = cell.contentView.bounds.size.width * CGFloat(item.percentLine)
-        cell.percentLineView.snp.remakeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.left.equalTo(cell.tagNameLabel.snp.left)
-            $0.height.equalTo(30)
-            $0.width.equalTo(percentWidth)
-        }
-        
-        
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.gouchengList.count
+        return gouchengPaihangList.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -145,10 +176,10 @@ extension MNkbsGouchengPreviewVC: UICollectionViewDataSource {
     
 }
 
-extension MNkbsGouchengPreviewVC: UICollectionViewDelegateFlowLayout {
+extension MNkbsGouchengInfoListVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let w: CGFloat = collectionView.bounds.size.width
-        let h: CGFloat = 40
+        let h: CGFloat = 62
         return CGSize(width: w, height: h)
     }
     
@@ -157,28 +188,17 @@ extension MNkbsGouchengPreviewVC: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 3
     }
     
 }
 
-extension MNkbsGouchengPreviewVC {
-    func showGouchengInfoNoteVC(item: MNkbsInsightItem) {
-        let vc = MNkbsGouchengInfoListVC(gouchengItem: item, beginTime: beginTime, endTime: endTime)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-}
-
-extension MNkbsGouchengPreviewVC: UICollectionViewDelegate {
+extension MNkbsGouchengInfoListVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = gouchengList[indexPath.item]
-        showGouchengInfoNoteVC(item: item)
-        
-        
         
     }
     
@@ -186,3 +206,9 @@ extension MNkbsGouchengPreviewVC: UICollectionViewDelegate {
         
     }
 }
+
+
+
+
+
+

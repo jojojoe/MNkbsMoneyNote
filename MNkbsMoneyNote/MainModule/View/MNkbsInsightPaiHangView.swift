@@ -232,6 +232,16 @@ class MNkbsInsightPaiHangViewCell: UICollectionViewCell {
     }
     
     func updateTagsList(tagList: [MNkbsTagItem]) {
+//        var tagListM: [MNkbsTagItem] = []
+//        tagListM.append(contentsOf: tagList)
+//        tagListM.removeAll { tagI in
+//            if tagI.tagName == "+--+" && tagI.bgColor == "#100000" {
+//                return true
+//            } else {
+//                return false
+//            }
+//        }
+        
         self.tagsList = tagList
         collection.reloadData()
     }
@@ -291,8 +301,18 @@ extension MNkbsInsightPaiHangViewCell: UICollectionViewDataSource {
         
         let cell = collectionView.dequeueReusableCell(withClass: MNkbsInputPreviewTagCell.self, for: indexPath)
         let item = tagsList[indexPath.item]
-        cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
+        
+        
+//        if item.tagName == "+--+" && item.bgColor == "#100000" {
+//            cell.tagNameLabel.text = "#无标签#"
+//            cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
+//        } else {
+//            cell.tagNameLabel.text = item.tagName
+//            cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
+//        }
         cell.tagNameLabel.text = item.tagName
+        cell.contentImgV.backgroundColor = UIColor(hexString: item.bgColor)
+        
         cell.layer.cornerRadius = 6
         cell.layer.masksToBounds = false
         cell.deleteBtn.isHidden = true

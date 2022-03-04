@@ -11,6 +11,9 @@ class MNkbsYearMonthSelectView: UIView {
     var backBtnClickBlock: (()->Void)?
     var selectClickBlock: ((String, String?)->Void)?
     var recordsList: [[String : Any]] = []
+    var collection: UICollectionView!
+    var currentYearStr: String = ""
+    var currentMonthStr: String = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,8 +31,15 @@ class MNkbsYearMonthSelectView: UIView {
     }
     
     func loadData() {
-        let recordsList =  MNkbsInsightManager.default.loadAllRecordYearsMonths()
-        self.recordsList = recordsList
+        MNkbsInsightManager.default.loadAllRecordYearsMonths(completion: {
+            [weak self] recordss in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.recordsList = recordss
+                self.collection.reloadData()
+            }
+        })
+        
     }
     
     func setupView() {
@@ -52,7 +62,7 @@ class MNkbsYearMonthSelectView: UIView {
             $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-470)
         }
         //
-        var collection: UICollectionView!
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
@@ -83,11 +93,19 @@ extension MNkbsYearMonthSelectView: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withClass: MNkbsMonthCell.self, for: indexPath)
         
         let bundle = recordsList[indexPath.section]
+        let year = bundle["year"] as? String ?? ""
         let months = bundle["month"] as? [String] ?? []
         let month = months[indexPath.item]
         
         let mS = monthDisplayName(monthIndexStr: month)
         cell.contentLab.text(mS)
+        
+        cell.selectBgV.isHidden = true
+        if year == currentYearStr {
+            if month == currentMonthStr {
+                cell.selectBgV.isHidden = false
+            }
+        }
         
         return cell
     }
@@ -165,7 +183,7 @@ extension MNkbsYearMonthSelectView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let padding: CGFloat = 15
+//        let padding: CGFloat = 15
         return CGSize(width: UIScreen.width, height: 44)
         
     }
@@ -183,8 +201,21 @@ extension MNkbsYearMonthSelectView: UICollectionViewDelegateFlowLayout {
                 [weak self] theYear in
                 guard let `self` = self else {return}
                 self.selectClickBlock?(theYear, nil)
+                self.currentYearStr = year ?? ""
+                self.currentMonthStr = ""
+                DispatchQueue.main.async {
+                    self.collection.reloadData()
+                }
             }
-            
+            if year == currentYearStr {
+                if currentMonthStr == "" {
+                    view.selectBgV.isHidden = false
+                } else {
+                    view.selectBgV.isHidden = true
+                }
+            } else {
+                view.selectBgV.isHidden = true
+            }
             return view
         }
         return UICollectionReusableView()
@@ -200,6 +231,9 @@ extension MNkbsYearMonthSelectView: UICollectionViewDelegate {
         let months = bundle["month"] as? [String] ?? []
         let monthStr = months[indexPath.item]
         selectClickBlock?(year, monthStr)
+        currentYearStr = year
+        currentMonthStr = monthStr
+        self.collection.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -213,6 +247,8 @@ extension MNkbsYearMonthSelectView: UICollectionViewDelegate {
 
 class MNkbsMonthCell: UICollectionViewCell {
     let contentLab = UILabel()
+    var selectBgV: UIView = UIView()
+    
     var monthStr: String = ""
     
     override init(frame: CGRect) {
@@ -227,7 +263,13 @@ class MNkbsMonthCell: UICollectionViewCell {
     func setupView() {
         //
         contentView.backgroundColor(.lightGray)
-        
+        //
+        selectBgV.adhere(toSuperview: contentView)
+            .backgroundColor(UIColor.orange)
+        selectBgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        selectBgV.isHidden = true
         //
         contentLab
             .adhere(toSuperview: contentView)
@@ -251,6 +293,8 @@ class MNkbsYearHearder: UICollectionReusableView {
     let contentLab = UILabel()
     let btn = UIButton()
     var clickBlock: ((String)->Void)?
+    let contentBgV = UIView()
+    let selectBgV = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -265,23 +309,35 @@ class MNkbsYearHearder: UICollectionReusableView {
         //
         //self.backgroundColor(.darkGray)
         
+        
+        contentBgV.adhere(toSuperview: self)
+            .backgroundColor(.lightGray)
+        contentBgV.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.left.equalToSuperview().offset(15)
+            $0.width.equalTo(100)
+        }
+        //
+        selectBgV.adhere(toSuperview: contentBgV)
+            .backgroundColor(UIColor.orange)
+        selectBgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        selectBgV.isHidden = true
         //
         contentLab
-            .backgroundColor(.lightGray)
-            .adhere(toSuperview: self)
+            .adhere(toSuperview: contentBgV)
             .fontName(15, FONT_AvenirHeavy)
             .textAlignment(.center)
             .color(.black)
         contentLab.adjustsFontSizeToFitWidth = true
         contentLab.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.top.equalToSuperview()
-            $0.left.equalToSuperview().offset(15)
-            $0.width.greaterThanOrEqualTo(100)
+            $0.left.right.top.bottom.equalToSuperview()
         }
         
         //
-        btn.adhere(toSuperview: self)
+        btn.adhere(toSuperview: contentBgV)
         btn.addTarget(self, action: #selector(btnClick(sender: )), for: .touchUpInside)
         btn.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()

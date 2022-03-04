@@ -18,6 +18,16 @@ class MNkbsInputTagView: UIView {
         super.init(frame: frame)
         setupView()
         loadData()
+        NotificationCenter.default.addObserver(self, selector: #selector(tagOrderChangeNotiAction(obj: )), name: NSNotification.Name.init(rawValue: "noti_editTagChange"), object: nil)
+        
+    }
+    
+    @objc func tagOrderChangeNotiAction(obj: Any) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.loadData()
+        }
     }
     
     func showEditTagBtnStatus(isShow: Bool) {
@@ -33,10 +43,7 @@ class MNkbsInputTagView: UIView {
     }
     
     func loadData() {
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-            
-        }
+         
         MNDBManager.default.selectTagList { tagList in
             DispatchQueue.main.async {
                 [weak self] in

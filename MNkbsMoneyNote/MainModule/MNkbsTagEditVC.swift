@@ -192,7 +192,7 @@ class MNkbsTagEditVC: UIViewController {
             }
             let tagItem = tagList[tagList.count - 1]
             let tagIndex: Int = tagItem.tagIndex.int ?? 999 + 1
-            MNDBManager.default.addMoneyTag(tagName: tag, tagColor: tagAddEditView.currentBgColorStr, tagIndex: tagIndex.string) {
+            MNDBManager.default.addMoneyTag(tagName: tag, tagColor: tagAddEditView.currentBgColorStr, tagIndex: tagIndex) {
                 DispatchQueue.main.async {
                     [weak self] in
                     guard let `self` = self else {return}
@@ -219,13 +219,14 @@ class MNkbsTagEditVC: UIViewController {
         }
         saveUpdateTagIndex()
         
-        
+       //
+        NotificationCenter.default.post(name: NSNotification.Name.init(rawValue: "noti_editTagChange"), object: nil)
     }
     
     func saveUpdateTagIndex() {
         
         for (index, tagItem) in tagList.enumerated() {
-            MNDBManager.default.addMoneyTag(tagName: tagItem.tagName, tagColor: tagItem.bgColor, tagIndex: index.string) {
+            MNDBManager.default.addMoneyTag(tagName: tagItem.tagName, tagColor: tagItem.bgColor, tagIndex: index) {
                 
             }
         }

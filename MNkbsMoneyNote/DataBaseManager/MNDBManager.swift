@@ -35,10 +35,14 @@ extension MNDBManager {
 
     func filterNote(tagNameList: [String], timeType: TimeFitlerType, completionBlock: (([MoneyNoteModel])->Void)?) {
       
-        let beginTimeDate = beginTimeDateFor(timeType: timeType)
-        let endTimeDate = Date.today()
+        if timeType == .all {
+            selectAllMoneyNoteItem(completionBlock: completionBlock)
+        } else {
+            let beginTimeDate = beginTimeDateFor(timeType: timeType)
+            let endTimeDate = Date.today()
+            selectNoteRecordTags(tagNames: tagNameList, beginTime: beginTimeDate, endTime: endTimeDate, completionBlock: completionBlock)
+        }
         
-        selectNoteRecordTags(tagNames: tagNameList, beginTime: beginTimeDate, endTime: endTimeDate, completionBlock: completionBlock)
 
     }
     
@@ -154,7 +158,7 @@ extension MNDBManager {
         // tag name
         let tagColor = Expression<String>("tagColor")
         // tagIndex 更改顺序 排序用
-        let tagIndex = Expression<String>("tagIndex")
+        let tagIndex = Expression<Int>("tagIndex")
         
         
         do {
@@ -185,7 +189,7 @@ extension MNDBManager {
                 
                 for (ind, tagModel) in model.tagModelList.enumerated() {
                     
-                    self.addMoneyTagRecord(systemDate: CLongLong(round(Date().unixTimestamp*1000)).string, tagName: tagModel.tagName, recordDate: model.recordDate, indexCount: ind.string) {
+                    self.addMoneyTagRecord(systemDate: CLongLong(round(Date().unixTimestamp*1000)).string, tagName: tagModel.tagName, notSystemDate: model.systemDate, indexCount: ind.string) {
                         completionBlock?()
                     }
                 }
@@ -239,6 +243,78 @@ extension MNDBManager {
             debugPrint("dberror: load favorites failed")
         }
     }
+    
+    func selectAllMoneyNoteItemMinMaxDate(completionBlock: ((Date, Date)->Void)?) {
+        var moneyNoteList: [MoneyNoteModel] = []
+        
+        do {
+            if let results = try db?.prepare("select * from MoneyNoteList ORDER BY recordDate DESC;") {
+                for row in results {
+                    
+                    let sysDate_m = row[0] as? String ?? ""
+                    let recorDate_m = row[1] as? String ?? ""
+                    let price_m = row[2] as? String ?? ""
+                    let remark_m = row[3] as? String ?? ""
+                    let tagJson_m = row[4] as? String ?? ""
+                    let data = try JSON.init(parseJSON: tagJson_m).rawData()
+                    let tagListModel = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
+                    
+                    
+                    let item = MoneyNoteModel(sysDate: sysDate_m, recorDate: recorDate_m, price: price_m, remark: remark_m, tagJson: tagJson_m, tagModel: tagListModel)
+                    
+                    moneyNoteList.append(item)
+                }
+            }
+            // maxItem
+            let firstInstallDate = loadFirstInstallDate()
+            if moneyNoteList.count == 0 {
+                
+                completionBlock?(firstInstallDate, firstInstallDate)
+            } else if moneyNoteList.count == 1 {
+                
+                
+                let firstItem = moneyNoteList.first!
+                let firstItemDate = convertDateStrToDate(dateStr: firstItem.recordDate)
+                let timeinter = firstInstallDate.timeIntervalSince(firstItemDate)
+                if timeinter >= 1 {
+                    completionBlock?(firstItemDate, firstInstallDate)
+                } else {
+                    completionBlock?(firstInstallDate, firstItemDate)
+                }
+            } else {
+                let firstMaxItem = moneyNoteList.first!
+                let lastMinItem = moneyNoteList.last!
+                let firstMaxItemDate = convertDateStrToDate(dateStr: firstMaxItem.recordDate)
+                let lastMinItemDate = convertDateStrToDate(dateStr: lastMinItem.recordDate)
+                let mintimeinter = firstInstallDate.timeIntervalSince(lastMinItemDate)
+                let maxtimeinter = firstMaxItemDate.timeIntervalSince(firstInstallDate)
+                var minDate: Date = Date()
+                var maxDate: Date = Date()
+                if mintimeinter >= 1 {
+                    minDate = lastMinItemDate
+                }
+                if maxtimeinter >= 1 {
+                    maxDate = firstMaxItemDate
+                }
+                completionBlock?(minDate, maxDate)
+            }
+        } catch {
+            debugPrint("dberror: load favorites failed")
+        }
+    }
+    
+    func convertDateStrToDate(dateStr: String) -> Date {
+        let timestamp = dateStr
+        let dou = Double(timestamp) ?? 0
+        let timeInterStr = String(dou / 1000)
+        if let interval = TimeInterval.init(timeInterStr) {
+            let recordDate = Date(timeIntervalSince1970: interval)
+            return recordDate
+        } else {
+            return Date()
+        }
+    }
+    
     // priceStr  recordDate
     func selectMoneyNoteItem(beginTime: Date, endTime: Date, _ orderBy: String = "recordDate", completionBlock: (([MoneyNoteModel])->Void)?) {
         let beginTimeStr = CLongLong(round(beginTime.unixTimestamp*1000)).string
@@ -263,9 +339,9 @@ extension MNDBManager {
                 }
             }
             
-            moneyNoteList = moneyNoteList.sorted { A, B in
-                A.priceStr.double() ?? 0 > B.priceStr.double() ?? 0
-            }
+//            moneyNoteList = moneyNoteList.sorted { A, B in
+//                A.priceStr.double() ?? 0 > B.priceStr.double() ?? 0
+//            }
             
             completionBlock?(moneyNoteList)
             
@@ -280,10 +356,10 @@ extension MNDBManager {
 
 extension MNDBManager {
     // TagRecordList
-    func addMoneyTagRecord(systemDate: String, tagName: String, recordDate: String, indexCount: String, completionBlock: (()->Void)?) {
+    func addMoneyTagRecord(systemDate: String, tagName: String, notSystemDate: String, indexCount: String, completionBlock: (()->Void)?) {
         do {
             let insetSql = try db?.prepare("INSERT OR REPLACE INTO MoneyTagRecordList (systemDate, tagName, recordDate, indexCount) VALUES (?,?,?,?)")
-            try insetSql?.run([systemDate, tagName, recordDate, indexCount])
+            try insetSql?.run([systemDate, tagName, notSystemDate, indexCount])
         } catch {
             
         }
@@ -332,13 +408,11 @@ extension MNDBManager {
             if let results = try db?.prepare("select * from MoneyTagRecordList \(whereStr);") {
                 var sysDateList: [String] = []
                 for row in results {
-                    let recordsysDate_m = row[2] as? String ?? ""
-                    if !sysDateList.contains(recordsysDate_m) {
-                        sysDateList.append(recordsysDate_m)
+                    let noteSystemDate_m = row[2] as? String ?? ""
+                    if !sysDateList.contains(noteSystemDate_m) {
+                        sysDateList.append(noteSystemDate_m)
                     }
                 }
-                
-                sysDateList = sysDateList.removeDuplicate()
                 
                 for date in sysDateList {
                     
@@ -376,7 +450,7 @@ extension MNDBManager {
 
 extension MNDBManager {
     // TagList
-    func addMoneyTag(tagName: String, tagColor: String, tagIndex: String, completionBlock: (()->Void)?) {
+    func addMoneyTag(tagName: String, tagColor: String, tagIndex: Int, completionBlock: (()->Void)?) {
         do {
             let insetSql = try db?.prepare("INSERT OR REPLACE INTO TagList (tagName, tagColor, tagIndex) VALUES (?,?,?)")
             try insetSql?.run([tagName, tagColor, tagIndex])
@@ -421,8 +495,8 @@ extension MNDBManager {
                     
                     let tagName_m = row[0] as? String ?? ""
                     let bgColor_m = row[1] as? String ?? ""
-                    let tagIndex_m = row[2] as? String ?? ""
-                    let item = MNkbsTagItem(bgColor: bgColor_m, tagName: tagName_m, tagIndex: tagIndex_m)
+                    let tagIndex_m = row[2] as? Int ?? 0
+                    let item = MNkbsTagItem(bgColor: bgColor_m, tagName: tagName_m, tagIndex: tagIndex_m.string)
                     tagList.append(item)
                     
                     

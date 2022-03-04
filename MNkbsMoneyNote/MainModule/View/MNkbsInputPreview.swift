@@ -21,7 +21,7 @@ class MNkbsInputPreview: UIView {
     let datePicker = UIDatePicker()
     var didUpdateCurrentTagsBlock: (([MNkbsTagItem])->Void)?
     var isShowTagDeleteBtn: Bool = false
-    
+    var isShowKongTag: Bool = true
     
     
     override init(frame: CGRect) {
@@ -46,16 +46,20 @@ extension MNkbsInputPreview {
     }
     
     func tageRemoveDefault(list: [MNkbsTagItem]) -> [MNkbsTagItem] {
-        var tagModelList: [MNkbsTagItem] = []
-        let defultItem = MNkbsTagItem()
-        tagModelList.append(contentsOf: list)
-        tagModelList.removeAll { tagItem in
-            if tagItem.bgColor == defultItem.bgColor && tagItem.tagName == defultItem.tagName {
-                return true
+        if isShowKongTag {
+            return list
+        } else {
+            var tagModelList: [MNkbsTagItem] = []
+            tagModelList.append(contentsOf: list)
+            tagModelList.removeAll { tagItem in
+                if tagItem.bgColor == "#100000" && tagItem.tagName == "+--+" {
+                    return true
+                }
+                return false
             }
-            return false
+            return tagModelList
         }
-        return tagModelList
+        
     }
     
     func fetchContentWith(noteItem: MoneyNoteModel, isEnableEditing: Bool = true) {
