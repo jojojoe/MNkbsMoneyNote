@@ -231,7 +231,6 @@ extension MNDBManager {
                     let data = try JSON.init(parseJSON: tagJson_m).rawData()
                     let tagListModel = try JSONDecoder().decode([MNkbsTagItem].self, from: data)
                     
-                    
                     let item = MoneyNoteModel(sysDate: sysDate_m, recorDate: recorDate_m, price: price_m, remark: remark_m, tagJson: tagJson_m, tagModel: tagListModel)
                     
                     moneyNoteList.append(item)
